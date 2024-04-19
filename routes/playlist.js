@@ -6,6 +6,12 @@ let playlists = [
   { id: 1, name: "first playlist", SpotifyplaylistID: "12345678910" },
 ];
 
+const playlistGetByID = (id) => {
+  const playlist = playlists.find((p) => p.id === parseInt(id));
+  if (!playlist) throw new AppError(404, "Playlist not found");
+  return playlist;
+};
+
 router.get("/", (req, res) => {
   res.status(201).json(playlists);
 });
@@ -24,8 +30,7 @@ router.post("/", (req, res, next) => {
 
 router.get("/:id", (req, res) => {
   const { id } = req.params;
-  const playlist = playlists.find((p) => p.id === parseInt(id));
-  if (!playlist) throw new AppError(404, "Playlist not found");
+  const playlist = playlistGetByID(id);
   res.status(200).json(playlist);
 });
 
