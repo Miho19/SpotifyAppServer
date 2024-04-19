@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1713435666153" clover="3.2.0">
-  <project timestamp="1713435666153" name="All files">
-    <metrics statements="37" coveredstatements="36" conditionals="1" coveredconditionals="1" methods="0" coveredmethods="0" elements="38" coveredelements="37" complexity="0" loc="37" ncloc="37" packages="2" files="3" classes="3"/>
+<coverage generated="1713495371197" clover="3.2.0">
+  <project timestamp="1713495371197" name="All files">
+    <metrics statements="33" coveredstatements="32" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0" elements="33" coveredelements="32" complexity="0" loc="33" ncloc="33" packages="2" files="3" classes="3"/>
     <package name="server">
       <metrics statements="19" coveredstatements="19" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="app.js" path="/home/josh/spotify-app/server/app.js">
@@ -28,27 +28,23 @@
       </file>
     </package>
     <package name="server.routes">
-      <metrics statements="18" coveredstatements="17" conditionals="1" coveredconditionals="1" methods="0" coveredmethods="0"/>
+      <metrics statements="14" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="index.js" path="/home/josh/spotify-app/server/routes/index.js">
-        <metrics statements="8" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
-        <line num="5" count="0" type="stmt"/>
-        <line num="6" count="1" type="stmt"/>
-        <line num="7" count="1" type="stmt"/>
-        <line num="8" count="1" type="stmt"/>
       </file>
       <file name="playlist.js" path="/home/josh/spotify-app/server/routes/playlist.js">
-        <metrics statements="10" coveredstatements="10" conditionals="1" coveredconditionals="1" methods="0" coveredmethods="0"/>
+        <metrics statements="10" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
         <line num="5" count="1" type="stmt"/>
-        <line num="6" count="1" type="cond" truecount="1" falsecount="0"/>
-        <line num="7" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
         <line num="8" count="1" type="stmt"/>
         <line num="9" count="1" type="stmt"/>
         <line num="10" count="1" type="stmt"/>
