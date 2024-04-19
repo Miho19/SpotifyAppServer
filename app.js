@@ -1,19 +1,20 @@
 require("dotenv").config();
 const express = require("express");
 const cookieParser = require("cookie-parser");
+
+const playlistRouter = require("./routes/playlist");
 const indexRouter = require("./routes/index");
+const { errorHandler } = require("./src/errors/AppError");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+app.use("/playlists", playlistRouter);
 app.use(indexRouter);
 
-app.listen(PORT, () => {
-  console.log(`Listening on PORT: ${PORT}`);
-});
+app.use(errorHandler);
 
 module.exports = app;
