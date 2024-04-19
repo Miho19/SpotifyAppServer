@@ -1,4 +1,5 @@
 const express = require("express");
+const { AppError } = require("../src/errors/AppError");
 const router = express.Router();
 
 let playlists = [
@@ -24,7 +25,7 @@ router.post("/", (req, res, next) => {
 router.get("/:id", (req, res) => {
   const { id } = req.params;
   const playlist = playlists.find((p) => p.id === parseInt(id));
-  if (!playlist) throw new Error("Not Found");
+  if (!playlist) throw new AppError(404, "Playlist not found");
   res.status(200).json(playlist);
 });
 

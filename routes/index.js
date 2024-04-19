@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
+const { AppError } = require("../src/errors/AppError");
 
 router.use((req, res, next) => {
-  return res.status(404).json({ error: "Path not found", error: 404 });
+  throw new AppError(404, "Not a route");
 });
 
 module.exports = router;

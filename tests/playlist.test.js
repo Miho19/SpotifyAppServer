@@ -36,7 +36,7 @@ describe("Playlist Route Testing", () => {
       });
   });
 
-  it("GET /playlists/:id, should return a playlist with that id", () => {
+  it("GET /playlists/1, should return a playlist with that id", () => {
     return request(app)
       .get("/playlists/1")
       .expect("Content-Type", /json/)
@@ -44,5 +44,12 @@ describe("Playlist Route Testing", () => {
       .then((response) => {
         expect(response.body).toEqual(expect.objectContaining({ id: 1 }));
       });
+  });
+
+  it("GET /playlists/123415, should not return a playlist and throw an error", () => {
+    return request(app)
+      .get("/playlists/123415")
+      .expect("Content-Type", /json/)
+      .expect(404);
   });
 });
