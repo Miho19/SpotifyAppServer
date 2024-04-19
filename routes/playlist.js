@@ -1,10 +1,24 @@
 const express = require("express");
 const router = express.Router();
 
-const playlist = [{ id: 1, name: "first song" }];
+let playlists = [
+  { id: 1, name: "first playlist", SpotifyplaylistID: "12345678910" },
+];
 
 router.get("/", (req, res) => {
-  res.json(playlist).status(200);
+  res.status(201).json(playlists);
+});
+
+router.post("/", (req, res, next) => {
+  const body = req.body;
+  const newPlaylist = {
+    ...body,
+    id: playlists.length + 1,
+    SpotifyplaylistID: "dfklmsfkms",
+  };
+  playlists = [...playlists, newPlaylist];
+
+  res.status(201).json(newPlaylist);
 });
 
 module.exports = router;
