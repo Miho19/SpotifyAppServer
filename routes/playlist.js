@@ -21,4 +21,11 @@ router.post("/", (req, res, next) => {
   res.status(201).json(newPlaylist);
 });
 
+router.get("/:id", (req, res) => {
+  const { id } = req.params;
+  const playlist = playlists.find((p) => p.id === parseInt(id));
+  if (!playlist) throw new Error("Not Found");
+  res.status(200).json(playlist);
+});
+
 module.exports = router;

@@ -36,5 +36,13 @@ describe("Playlist Route Testing", () => {
       });
   });
 
-  it("GET /playlists/:id, should return a playlist with that id", () => {});
+  it("GET /playlists/:id, should return a playlist with that id", () => {
+    return request(app)
+      .get("/playlists/1")
+      .expect("Content-Type", /json/)
+      .expect(200)
+      .then((response) => {
+        expect(response.body).toEqual(expect.objectContaining({ id: 1 }));
+      });
+  });
 });
