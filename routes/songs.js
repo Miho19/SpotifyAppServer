@@ -2,14 +2,22 @@ const express = require("express");
 const router = express.Router({ mergeParams: true });
 const { AppError } = require("../src/errors/AppError");
 
-router.get("/:id/songs", (req, res) => {
+const {
+  playlistGetByID,
+  songListObjectGetByID,
+  songObjectCheckFieldUpdates,
+} = require("../src/utils");
+let { playlists, songListIDArray } = require("../src/utils");
+
+router.get("/", (req, res) => {
   const { id } = req.params;
+  console.log(id);
   const playlist = playlistGetByID(id);
   const songList = songListObjectGetByID(playlist.id);
   res.status(200).json([...songList.songArray]);
 });
 
-router.get("/:id/songs/:songID", (req, res) => {
+router.get("/:songID", (req, res) => {
   const { id, songID } = req.params;
   const playlist = playlistGetByID(id);
   const songList = songListObjectGetByID(playlist.id);
@@ -20,18 +28,20 @@ router.get("/:id/songs/:songID", (req, res) => {
   res.status(200).json({ ...song });
 });
 
-router.patch("/:id/songs/:songID", (req, res) => {
+router.patch("/:songID", (req, res) => {
   const { id, songID } = req.params;
   const body = req.body;
   const playlist = playlistGetByID(id);
   const songList = songListObjectGetByID(playlist.id);
   const songListArray = songList.songArray;
 
+  const updateFields = songObjectCheckFieldUpdates(body);
+
   let updatedSong;
 
   const updatedSongListArray = songListArray.map((song) => {
     if (song.id === songID) {
-      updatedSong = { ...song, ...body };
+      updatedSong = { ...song, ...updateFields };
       return updatedSong;
     }
     return song;
@@ -42,3 +52,5 @@ router.patch("/:id/songs/:songID", (req, res) => {
 
   res.status(200).json(updatedSong);
 });
+
+module.exports = router;

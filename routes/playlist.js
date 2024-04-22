@@ -1,36 +1,8 @@
 const express = require("express");
-const { AppError } = require("../src/errors/AppError");
 const router = express.Router();
-
-let playlists = [
-  {
-    id: "1",
-    name: "first playlist",
-    SpotifyplaylistID: "12345678910",
-    songListID: "1",
-  },
-];
-
-let songListIDArray = [
-  {
-    id: "1",
-    songArray: [
-      { id: "1", spotifyTrackID: "", upvotes: 0, downvotes: 0, userID: "" },
-    ],
-  },
-];
-
-const playlistGetByID = (id) => {
-  const playlist = playlists.find((p) => p.id === id);
-  if (!playlist) throw new AppError(404, "Playlist not found");
-  return playlist;
-};
-
-const songListObjectGetByID = (id) => {
-  const songListObject = songListIDArray.find((s) => s.id === id);
-  if (!songListObject) throw new AppError(404, "Song list not found");
-  return songListObject;
-};
+const songsRouter = require("./songs");
+const { playlistGetByID } = require("../src/utils");
+let { playlists } = require("../src/utils");
 
 router.get("/", (req, res) => {
   res.status(200).json(playlists);
@@ -53,5 +25,7 @@ router.get("/:id", (req, res) => {
   const playlist = playlistGetByID(id);
   res.status(200).json(playlist);
 });
+
+router.use("/:id/songs", songsRouter);
 
 module.exports = router;
