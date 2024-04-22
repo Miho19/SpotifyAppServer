@@ -1,26 +1,18 @@
 const express = require("express");
-const { AppError } = require("../src/errors/AppError");
 const router = express.Router();
-
-let playlists = [
-  { id: 1, name: "first playlist", SpotifyplaylistID: "12345678910" },
-];
-
-const playlistGetByID = (id) => {
-  const playlist = playlists.find((p) => p.id === parseInt(id));
-  if (!playlist) throw new AppError(404, "Playlist not found");
-  return playlist;
-};
+const songsRouter = require("./songs");
+const { playlistGetByID } = require("../src/utils");
+let { playlists } = require("../src/utils");
 
 router.get("/", (req, res) => {
-  res.status(201).json(playlists);
+  res.status(200).json(playlists);
 });
 
 router.post("/", (req, res, next) => {
   const body = req.body;
   const newPlaylist = {
     ...body,
-    id: playlists.length + 1,
+    id: String(playlists.length + 1),
     SpotifyplaylistID: "dfklmsfkms",
   };
   playlists = [...playlists, newPlaylist];
@@ -33,5 +25,7 @@ router.get("/:id", (req, res) => {
   const playlist = playlistGetByID(id);
   res.status(200).json(playlist);
 });
+
+router.use("/:id/songs", songsRouter);
 
 module.exports = router;

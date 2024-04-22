@@ -5,13 +5,13 @@ describe("Playlist Route Testing", () => {
   it("GET /playlists, returns all playlists", () => {
     return request(app)
       .get("/playlists")
-      .expect(201)
+      .expect(200)
       .expect("Content-Type", /json/)
       .then((response) => {
         expect(response.body).toEqual(
           expect.arrayContaining([
             expect.objectContaining({
-              id: expect.any(Number),
+              id: expect.any(String),
               name: expect.any(String),
               SpotifyplaylistID: expect.any(String),
             }),
@@ -28,7 +28,7 @@ describe("Playlist Route Testing", () => {
       .then((response) => {
         expect(response.body).toEqual(
           expect.objectContaining({
-            id: expect.any(Number),
+            id: expect.any(String),
             name: "new playlist",
             SpotifyplaylistID: expect.any(String),
           })
@@ -42,7 +42,7 @@ describe("Playlist Route Testing", () => {
       .expect("Content-Type", /json/)
       .expect(200)
       .then((response) => {
-        expect(response.body).toEqual(expect.objectContaining({ id: 1 }));
+        expect(response.body).toEqual(expect.objectContaining({ id: "1" }));
       });
   });
 
@@ -51,5 +51,84 @@ describe("Playlist Route Testing", () => {
       .get("/playlists/123415")
       .expect("Content-Type", /json/)
       .expect(404);
+  });
+
+  it("GET /playlist/1/songs should return a playlist", () => {
+    return request(app)
+      .get("/playlists/1/songs")
+      .expect("Content-Type", /json/)
+      .expect(200)
+      .then((response) => {
+        expect(response.body).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              id: expect.any(String),
+              spotifyTrackID: expect.any(String),
+              upvotes: expect.any(Number),
+              downvotes: expect.any(Number),
+              userID: expect.any(String),
+            }),
+          ])
+        );
+      });
+  });
+
+  it("GET /playlist/132131/songs, should return 404 error", () => {
+    return request(app)
+      .get("/playlist/132131/songs")
+      .expect("Content-Type", /json/)
+      .expect(404);
+  });
+  it("PATCH /playlists/1/songs/1, should increase the votes on a song", () => {
+    return request(app)
+      .patch("/playlists/1/songs/1")
+      .send({ upvotes: 1 })
+      .expect(200)
+      .expect("Content-Type", /json/)
+      .then((response) => {
+        expect(response.body).toEqual(
+          expect.objectContaining({
+            id: "1",
+            upvotes: 1,
+            downvotes: 0,
+            spotifyTrackID: expect.any(String),
+            userID: expect.any(String),
+          })
+        );
+      });
+  });
+
+  it("PATCH /playlists/1/songs/121312321, song should not be found and update should fail", () => {
+    return request(app)
+      .patch("/playlists/1/songs/121312321")
+      .send({ upvotes: 1 })
+      .expect(404)
+      .expect("Content-Type", /json/)
+      .then((response) => {
+        expect(response.body).toEqual(
+          expect.objectContaining({
+            statusCode: 404,
+            message: expect.any(String),
+          })
+        );
+      });
+  });
+
+  it("GET /playlists/1/songs/1, should return a song", () => {
+    return request(app)
+      .get("/playlists/1/songs/1")
+      .expect(200)
+      .expect("Content-Type", /json/)
+      .then((response) => {
+        expect(response.body).toEqual(
+          expect.objectContaining({
+            id: "1",
+            spotifyTrackID: expect.any(String),
+            upvotes: expect.any(Number),
+            downvotes: expect.any(Number),
+            userID: expect.any(String),
+          })
+        );
+      });
   });
 });
