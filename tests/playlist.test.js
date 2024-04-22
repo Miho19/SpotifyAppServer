@@ -113,4 +113,22 @@ describe("Playlist Route Testing", () => {
         );
       });
   });
+
+  it("GET /playlists/1/songs/1, should return a song", () => {
+    return request(app)
+      .get("/playlists/1/songs/1")
+      .expect(200)
+      .expect("Content-Type", /json/)
+      .then((response) => {
+        expect(response.body).toEqual(
+          expect.objectContaining({
+            id: "1",
+            spotifyTrackID: expect.any(String),
+            upvotes: expect.any(Number),
+            downvotes: expect.any(Number),
+            userID: expect.any(String),
+          })
+        );
+      });
+  });
 });
