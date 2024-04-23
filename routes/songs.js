@@ -11,7 +11,6 @@ let { playlists, songListIDArray } = require("../src/utils");
 
 router.get("/", (req, res) => {
   const { id } = req.params;
-  console.log(id);
   const playlist = playlistGetByID(id);
   const songList = songListObjectGetByID(playlist.id);
   res.status(200).json([...songList.songArray]);
