@@ -1,9 +1,10 @@
 const request = require("supertest");
 const app = require("../app");
 
-describe.skip("Testing the user routes", () => {
+describe("Testing the user routes", () => {
   it("GET /users, return all users within the system", () => {
     return request(app)
+      .get("/users")
       .expect(200)
       .expect("Content-Type", /json/)
       .then((response) => {

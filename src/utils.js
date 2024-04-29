@@ -25,6 +25,8 @@ let songListIDArray = [
   },
 ];
 
+let users = [{ id: "-1", spotifyUserID: "12345" }];
+
 const songListObjectAddSong = (
   songListObjectID,
   { spotifyTrackID, userID }
@@ -107,8 +109,6 @@ const songObjectCheckFieldUpdates = (body) => {
   return body;
 };
 
-let users = [{ id: uuid(), spotifyUserID: "1234567" }];
-
 const usersAdd = (body) => {
   const { spotifyUserID } = body;
 
@@ -153,4 +153,5 @@ module.exports = {
   songObjectInvalidUpdateFieldsArray,
   playlists,
   songListIDArray,
+  users,
 };

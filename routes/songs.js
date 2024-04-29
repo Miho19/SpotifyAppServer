@@ -8,7 +8,6 @@ const {
   songListObjectGetByID,
   songObjectCheckFieldUpdates,
 } = require("../src/utils");
-let { playlists, songListIDArray } = require("../src/utils");
 
 router.get("/", (req, res) => {
   const { playlistID } = req.params;
