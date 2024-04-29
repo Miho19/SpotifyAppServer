@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.63% </span>
+                <span class="strong">76.81% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>46/55</span>
+                <span class='fraction'>53/69</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">60% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>3/5</span>
+                <span class='fraction'>3/4</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.63% </span>
+                <span class="strong">76.81% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>46/55</span>
+                <span class='fraction'>53/69</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -118,7 +118,21 @@
 <a name='L53'></a><a href='#L53'>53</a>
 <a name='L54'></a><a href='#L54'>54</a>
 <a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -144,6 +158,20 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -176,6 +204,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const express = require("express");
 const router = express.Router({ mergeParams: true });
 const { AppError } = require("../src/errors/AppError");
+const { songListObjectAddSong } = require("../src/utils");
 &nbsp;
 const {
   playlistGetByID,
@@ -185,27 +214,40 @@ const {
 let { playlists, songListIDArray } = require("../src/utils");
 &nbsp;
 router.get("/", (req, res) =&gt; {
-  const { id } = req.params;
-  const playlist = playlistGetByID(id);
-  const songList = songListObjectGetByID(playlist.id);
-  res.status(200).json([...songList.songArray]);
+  const { playlistID } = req.params;
+  const playlist = playlistGetByID(playlistID);
+  const songListObject = songListObjectGetByID(playlist.songListObjectID);
+  res.status(200).json([...songListObject.songArray]);
+});
+&nbsp;
+router.post("/", (req, res) =&gt; {
+  const { playlistID } = req.params;
+  const { spotifyTrackID, userID } = req.body;
+  const playlist = playlistGetByID(playlistID);
+&nbsp;
+  const newSong = songListObjectAddSong(playlist.songListObjectID, {
+    spotifyTrackID,
+    userID,
+  });
+&nbsp;
+  res.status(201).json({ ...newSong });
 });
 &nbsp;
 router.get("/:songID", (req, res) =&gt; {
-  const { id, songID } = req.params;
-  const playlist = playlistGetByID(id);
-  const songList = songListObjectGetByID(playlist.id);
-  const songListArray = songList.songArray;
-  const song = songListArray.find((s) =&gt; s.id === songID);
-&nbsp;
-  if (!song) <span class="branch-0 cbranch-no" title="branch not covered" >throw new AppError(404, "Song ID not found");</span>
+<span class="cstat-no" title="statement not covered" >  const { playlistID, songID } = req.params;</span>
+<span class="cstat-no" title="statement not covered" >  const playlist = playlistGetByID(playlistID);</span>
+<span class="cstat-no" title="statement not covered" >  const songList = songListObjectGetByID(playlist.id);</span>
+<span class="cstat-no" title="statement not covered" >  const songListArray = songList.songArray;</span>
+<span class="cstat-no" title="statement not covered" >  const song = songListArray.find((s) =&gt; s.id === songID);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  if (!song) throw new AppError(404, "Song ID not found");</span>
 <span class="cstat-no" title="statement not covered" >  res.status(200).json({ ...song });</span>
 });
 &nbsp;
 router.patch("/:songID", (req, res) =&gt; {
-  const { id, songID } = req.params;
+  const { playlistID, songID } = req.params;
   const body = req.body;
-  const playlist = playlistGetByID(id);
+  const playlist = playlistGetByID(playlistID);
   const songList = songListObjectGetByID(playlist.id);
   const songListArray = songList.songArray;
 &nbsp;
@@ -235,7 +277,7 @@ module.exports = router;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-23T02:04:40.909Z
+                at 2024-04-29T01:25:18.603Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

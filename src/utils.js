@@ -6,7 +6,7 @@ let playlists = [
     id: "-1",
     name: "first playlist",
     SpotifyplaylistID: "12345678910",
-    songListID: "-1",
+    songListObjectID: "-1",
   },
 ];
 
@@ -14,13 +14,35 @@ let songListIDArray = [
   {
     id: "-1",
     songArray: [
-      { id: "-1", spotifyTrackID: "", upvotes: 0, downvotes: 0, userID: "" },
+      {
+        id: "-1",
+        spotifyTrackID: "",
+        upvotes: 0,
+        downvotes: 0,
+        userID: "",
+      },
     ],
   },
 ];
 
-const playlistGetByID = (id) => {
-  const playlist = playlists.find((p) => p.id === id);
+const songListObjectAddSong = (
+  songListObjectID,
+  { spotifyTrackID, userID }
+) => {
+  const songListObject = songListObjectGetByID(songListObjectID);
+  const newSongObject = {
+    id: uuid(),
+    upvotes: 0,
+    downvotes: 0,
+    spotifyTrackID,
+    userID,
+  };
+  songListObject.songArray = [...songListObject.songArray, newSongObject];
+  return newSongObject;
+};
+
+const playlistGetByID = (playlistID) => {
+  const playlist = playlists.find((p) => p.id === playlistID);
   if (!playlist) throw new AppError(404, "Playlist not found");
   return playlist;
 };
@@ -35,7 +57,7 @@ const playlistCreate = (playlistName) => {
     name: playlistName,
     id: uuid(),
     SpotifyplaylistID: spotifyPlaylistCreate(playlistName),
-    songListID: songListObjectCreate(),
+    songListObjectID: songListObjectCreate(),
   };
 
   playlists = [...playlists, createdPlaylist];
@@ -54,8 +76,8 @@ const spotifyPlaylistCreate = (playlistName) => {
   return uuid();
 };
 
-const songListObjectGetByID = (id) => {
-  const songListObject = songListIDArray.find((s) => s.id === id);
+const songListObjectGetByID = (songListObjectID) => {
+  const songListObject = songListIDArray.find((s) => s.id === songListObjectID);
   if (!songListObject) throw new AppError(404, "Song list not found");
   return songListObject;
 };
@@ -87,12 +109,40 @@ const usersAdd = (body) => {
     throw new AppError(400, "That user already exists");
 };
 
+const resetData = () => {
+  playlists = [
+    {
+      id: "-1",
+      name: "first playlist",
+      SpotifyplaylistID: "12345678910",
+      songListObjectID: "-1",
+    },
+  ];
+
+  songListIDArray = [
+    {
+      id: "-1",
+      songArray: [
+        {
+          id: "-1",
+          spotifyTrackID: "",
+          upvotes: 0,
+          downvotes: 0,
+          userID: "",
+        },
+      ],
+    },
+  ];
+};
+
 module.exports = {
   usersAdd,
   playlistGetByID,
   songListObjectGetByID,
   songObjectCheckFieldUpdates,
   playlistCreate,
+  songListObjectAddSong,
+  resetData,
   playlists,
   songListIDArray,
 };

@@ -21,13 +21,13 @@ router.post("/", (req, res, next) => {
   res.status(201).json(newPlaylist);
 });
 
-router.get("/:id", (req, res) => {
-  const { id } = req.params;
-  console.log(id);
-  const playlist = playlistGetByID(id);
+router.get("/:playlistID", (req, res) => {
+  const { playlistID } = req.params;
+
+  const playlist = playlistGetByID(playlistID);
   res.status(200).json(playlist);
 });
 
-router.use("/:id/songs", songsRouter);
+router.use("/:playlistID/songs", songsRouter);
 
 module.exports = router;

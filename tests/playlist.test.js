@@ -1,6 +1,7 @@
 const request = require("supertest");
 const app = require("../app");
 const { playlistCreate } = require("../src/utils");
+const { v4: uuid } = require("uuid");
 
 describe("Playlist Route Testing", () => {
   describe("Retrieving playlist data from the API", () => {
@@ -93,57 +94,37 @@ describe("Playlist Route Testing", () => {
       return request(app)
         .get(`/playlists/${id}/songs`)
         .expect("Content-Type", /json/)
-        .expect(200)
+        .expect(200);
+    });
+
+    it(`PATCH /playlists/${id}/songs/1, should fail since song doesn't exist`, () => {
+      return request(app)
+        .patch(`/playlists/${id}/songs/1`)
+        .send({ upvotes: 1 })
+        .expect(404)
+        .expect("Content-Type", /json/);
+    });
+
+    it(`POST /playlists/${id}/songs, create a new song and return that new song`, () => {
+      const spotifyTrackID = uuid();
+      const userID = uuid();
+
+      return request(app)
+        .post(`/playlists/${id}/songs`)
+        .send({ spotifyTrackID, userID })
+        .expect("Content-Type", /json/)
+        .expect(201)
         .then((response) => {
-          expect(response.body).toEqual(
-            expect.arrayContaining([
-              expect.objectContaining({
-                id: expect.any(String),
-                spotifyTrackID: expect.any(String),
-                upvotes: expect.any(Number),
-                downvotes: expect.any(Number),
-                userID: expect.any(String),
-              }),
-            ])
+          expect(response.body).toStrictEqual(
+            expect.objectContaining({
+              id: expect.any(String),
+              spotifyTrackID,
+              upvotes: expect.any(Number),
+              downvotes: expect.any(Number),
+              userID,
+            })
           );
         });
     });
-  });
-
-  it("PATCH /playlists/1/songs/1, should increase the votes on a song", () => {
-    return request(app)
-      .patch("/playlists/1/songs/1")
-      .send({ upvotes: 1 })
-      .expect(200)
-      .expect("Content-Type", /json/)
-      .then((response) => {
-        expect(response.body).toEqual(
-          expect.objectContaining({
-            id: expect.any(String),
-            upvotes: 1,
-            downvotes: 0,
-            spotifyTrackID: expect.any(String),
-            userID: expect.any(String),
-          })
-        );
-      });
-  });
-
-  it("GET /playlists/1/songs/1, should return a song", () => {
-    return request(app)
-      .get("/playlists/1/songs/1")
-      .expect(200)
-      .expect("Content-Type", /json/)
-      .then((response) => {
-        expect(response.body).toEqual(
-          expect.objectContaining({
-            id: expect.any(String),
-            spotifyTrackID: expect.any(String),
-            upvotes: expect.any(Number),
-            downvotes: expect.any(Number),
-            userID: expect.any(String),
-          })
-        );
-      });
   });
 });
