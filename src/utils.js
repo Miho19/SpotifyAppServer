@@ -30,6 +30,12 @@ const songListObjectAddSong = (
   { spotifyTrackID, userID }
 ) => {
   const songListObject = songListObjectGetByID(songListObjectID);
+
+  const songArray = songListObject.songArray;
+
+  if (songArray.some((song) => song.spotifyTrackID === spotifyTrackID))
+    throw new AppError(400, "Songs must be unique");
+
   const newSongObject = {
     id: uuid(),
     upvotes: 0,
@@ -37,7 +43,8 @@ const songListObjectAddSong = (
     spotifyTrackID,
     userID,
   };
-  songListObject.songArray = [...songListObject.songArray, newSongObject];
+
+  songListObject.songArray = [...songArray, newSongObject];
   return newSongObject;
 };
 
@@ -143,6 +150,7 @@ module.exports = {
   playlistCreate,
   songListObjectAddSong,
   resetData,
+  songObjectInvalidUpdateFieldsArray,
   playlists,
   songListIDArray,
 };
