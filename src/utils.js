@@ -124,6 +124,12 @@ const usersAdd = (body) => {
   return newUser;
 };
 
+const usersGet = (userID) => {
+  const user = users.find((u) => u.id === userID);
+  if (!user) throw new AppError(404, "User not found");
+  return user;
+};
+
 const resetData = () => {
   playlists = [
     {
@@ -158,6 +164,7 @@ module.exports = {
   playlistCreate,
   songListObjectAddSong,
   resetData,
+  usersGet,
   songObjectInvalidUpdateFieldsArray,
   playlists,
   songListIDArray,

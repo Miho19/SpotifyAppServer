@@ -2,6 +2,7 @@ const request = require("supertest");
 const app = require("../app");
 
 const { v4: uuid } = require("uuid");
+const { usersAdd } = require("../src/utils");
 
 describe("Testing the user routes", () => {
   describe("Retrieving users list", () => {
@@ -39,6 +40,30 @@ describe("Testing the user routes", () => {
       it("POST /users, with no spotify id should throw", () => {
         return request(app).post("/users").send({}).expect(400);
       });
+    });
+  });
+
+  describe("Create a new user and get that user", () => {
+    let userID;
+    beforeAll(() => {
+      const response = usersAdd({ spotifyUserID: uuid() });
+      const { id: responseID } = response;
+      userID = responseID;
+    });
+
+    it("Retrieve a user by their ID", () => {
+      return request(app)
+        .get(`/users/${userID}`)
+        .expect(200)
+        .expect("Content-Type", /json/)
+        .then((response) => {
+          expect(response.body).toEqual(
+            expect.objectContaining({
+              id: userID,
+              spotifyUserID: expect.any(String),
+            })
+          );
+        });
     });
   });
 });
