@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1714364855371" clover="3.2.0">
-  <project timestamp="1714364855371" name="All files">
-    <metrics statements="340" coveredstatements="324" conditionals="46" coveredconditionals="42" methods="12" coveredmethods="12" elements="398" coveredelements="378" complexity="0" loc="340" ncloc="340" packages="4" files="7" classes="7"/>
+<coverage generated="1714388365212" clover="3.2.0">
+  <project timestamp="1714388365212" name="All files">
+    <metrics statements="340" coveredstatements="324" conditionals="46" coveredconditionals="43" methods="12" coveredmethods="12" elements="398" coveredelements="379" complexity="0" loc="340" ncloc="340" packages="4" files="7" classes="7"/>
     <package name="server">
       <metrics statements="23" coveredstatements="23" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="app.js" path="/home/josh/spotify-app/server/app.js">
@@ -170,18 +170,18 @@
         <line num="14" count="1" type="stmt"/>
         <line num="15" count="1" type="stmt"/>
         <line num="16" count="1" type="cond" truecount="1" falsecount="0"/>
-        <line num="17" count="1" type="stmt"/>
-        <line num="18" count="1" type="stmt"/>
-        <line num="19" count="1" type="stmt"/>
+        <line num="17" count="2" type="stmt"/>
+        <line num="18" count="2" type="stmt"/>
+        <line num="19" count="2" type="stmt"/>
         <line num="20" count="1" type="stmt"/>
         <line num="21" count="1" type="stmt"/>
         <line num="22" count="1" type="stmt"/>
       </file>
     </package>
     <package name="server.src">
-      <metrics statements="172" coveredstatements="172" conditionals="33" coveredconditionals="30" methods="10" coveredmethods="10"/>
+      <metrics statements="172" coveredstatements="172" conditionals="33" coveredconditionals="31" methods="10" coveredmethods="10"/>
       <file name="utils.js" path="/home/josh/spotify-app/server/src/utils.js">
-        <metrics statements="172" coveredstatements="172" conditionals="33" coveredconditionals="30" methods="10" coveredmethods="10"/>
+        <metrics statements="172" coveredstatements="172" conditionals="33" coveredconditionals="31" methods="10" coveredmethods="10"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -309,8 +309,8 @@
         <line num="125" count="2" type="stmt"/>
         <line num="126" count="1" type="stmt"/>
         <line num="127" count="1" type="cond" truecount="1" falsecount="0"/>
-        <line num="128" count="1" type="cond" truecount="1" falsecount="0"/>
-        <line num="129" count="1" type="cond" truecount="0" falsecount="1"/>
+        <line num="128" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="129" count="2" type="cond" truecount="1" falsecount="0"/>
         <line num="130" count="1" type="stmt"/>
         <line num="131" count="1" type="stmt"/>
         <line num="132" count="1" type="stmt"/>
@@ -362,15 +362,15 @@
         <metrics statements="13" coveredstatements="13" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="cond" truecount="1" falsecount="0"/>
-        <line num="3" count="13" type="stmt"/>
-        <line num="4" count="13" type="stmt"/>
-        <line num="5" count="13" type="stmt"/>
-        <line num="6" count="13" type="stmt"/>
+        <line num="3" count="14" type="stmt"/>
+        <line num="4" count="14" type="stmt"/>
+        <line num="5" count="14" type="stmt"/>
+        <line num="6" count="14" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
-        <line num="8" count="6" type="cond" truecount="1" falsecount="0"/>
-        <line num="9" count="6" type="stmt"/>
-        <line num="10" count="6" type="stmt"/>
-        <line num="11" count="6" type="stmt"/>
+        <line num="8" count="7" type="cond" truecount="1" falsecount="0"/>
+        <line num="9" count="7" type="stmt"/>
+        <line num="10" count="7" type="stmt"/>
+        <line num="11" count="7" type="stmt"/>
         <line num="12" count="1" type="stmt"/>
         <line num="13" count="1" type="stmt"/>
       </file>

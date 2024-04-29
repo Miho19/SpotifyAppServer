@@ -40,6 +40,13 @@ describe("Testing the user routes", () => {
       it("POST /users, with no spotify id should throw", () => {
         return request(app).post("/users").send({}).expect(400);
       });
+
+      it("GET /user/1 should not return a valid user", () => {
+        return request(app)
+          .get("/users/1")
+          .expect(404)
+          .expect("Content-Type", /json/);
+      });
     });
   });
 

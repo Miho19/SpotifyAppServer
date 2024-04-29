@@ -9,7 +9,7 @@ router.get("/", (req, res) => {
   res.status(200).json(playlists);
 });
 
-router.post("/", (req, res, next) => {
+router.post("/", (req, res) => {
   const body = req.body;
   const newPlaylist = {
     ...body,
