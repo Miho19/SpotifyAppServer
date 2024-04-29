@@ -1,25 +1,37 @@
 const express = require("express");
 const router = express.Router({ mergeParams: true });
 const { AppError } = require("../src/errors/AppError");
+const { songListObjectAddSong } = require("../src/utils");
 
 const {
   playlistGetByID,
   songListObjectGetByID,
   songObjectCheckFieldUpdates,
 } = require("../src/utils");
-let { playlists, songListIDArray } = require("../src/utils");
 
 router.get("/", (req, res) => {
-  const { id } = req.params;
-  console.log(id);
-  const playlist = playlistGetByID(id);
-  const songList = songListObjectGetByID(playlist.id);
-  res.status(200).json([...songList.songArray]);
+  const { playlistID } = req.params;
+  const playlist = playlistGetByID(playlistID);
+  const songListObject = songListObjectGetByID(playlist.songListObjectID);
+  res.status(200).json([...songListObject.songArray]);
+});
+
+router.post("/", (req, res) => {
+  const { playlistID } = req.params;
+  const { spotifyTrackID, userID } = req.body;
+  const playlist = playlistGetByID(playlistID);
+
+  const newSong = songListObjectAddSong(playlist.songListObjectID, {
+    spotifyTrackID,
+    userID,
+  });
+
+  res.status(201).json({ ...newSong });
 });
 
 router.get("/:songID", (req, res) => {
-  const { id, songID } = req.params;
-  const playlist = playlistGetByID(id);
+  const { playlistID, songID } = req.params;
+  const playlist = playlistGetByID(playlistID);
   const songList = songListObjectGetByID(playlist.id);
   const songListArray = songList.songArray;
   const song = songListArray.find((s) => s.id === songID);
@@ -29,9 +41,9 @@ router.get("/:songID", (req, res) => {
 });
 
 router.patch("/:songID", (req, res) => {
-  const { id, songID } = req.params;
+  const { playlistID, songID } = req.params;
   const body = req.body;
-  const playlist = playlistGetByID(id);
+  const playlist = playlistGetByID(playlistID);
   const songList = songListObjectGetByID(playlist.id);
   const songListArray = songList.songArray;
 

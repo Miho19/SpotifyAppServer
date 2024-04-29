@@ -1,31 +1,92 @@
 const { AppError } = require("../src/errors/AppError");
+const { v4: uuid } = require("uuid");
 
 let playlists = [
   {
-    id: "1",
+    id: "-1",
     name: "first playlist",
     SpotifyplaylistID: "12345678910",
-    songListID: "1",
+    songListObjectID: "-1",
   },
 ];
 
 let songListIDArray = [
   {
-    id: "1",
+    id: "-1",
     songArray: [
-      { id: "1", spotifyTrackID: "", upvotes: 0, downvotes: 0, userID: "" },
+      {
+        id: "-1",
+        spotifyTrackID: "",
+        upvotes: 0,
+        downvotes: 0,
+        userID: "",
+      },
     ],
   },
 ];
 
-const playlistGetByID = (id) => {
-  const playlist = playlists.find((p) => p.id === id);
+let users = [{ id: "-1", spotifyUserID: "12345" }];
+
+const songListObjectAddSong = (
+  songListObjectID,
+  { spotifyTrackID, userID }
+) => {
+  const songListObject = songListObjectGetByID(songListObjectID);
+
+  const songArray = songListObject.songArray;
+
+  if (songArray.some((song) => song.spotifyTrackID === spotifyTrackID))
+    throw new AppError(400, "Songs must be unique");
+
+  const newSongObject = {
+    id: uuid(),
+    upvotes: 0,
+    downvotes: 0,
+    spotifyTrackID,
+    userID,
+  };
+
+  songListObject.songArray = [...songArray, newSongObject];
+  return newSongObject;
+};
+
+const playlistGetByID = (playlistID) => {
+  const playlist = playlists.find((p) => p.id === playlistID);
   if (!playlist) throw new AppError(404, "Playlist not found");
   return playlist;
 };
 
-const songListObjectGetByID = (id) => {
-  const songListObject = songListIDArray.find((s) => s.id === id);
+const playlistCreate = (playlistName) => {
+  playlistName = playlistName.trim();
+  if (!playlistName) throw new AppError(400, "Must supply a playlist name");
+  if (playlists.some((playlist) => playlist.name === playlistName))
+    throw new AppError(400, "Playlist names must be unique");
+
+  const createdPlaylist = {
+    name: playlistName,
+    id: uuid(),
+    SpotifyplaylistID: spotifyPlaylistCreate(playlistName),
+    songListObjectID: songListObjectCreate(),
+  };
+
+  playlists = [...playlists, createdPlaylist];
+  return createdPlaylist;
+};
+
+const songListObjectCreate = () => {
+  const id = uuid();
+
+  songListIDArray = [...songListIDArray, { id, songArray: [] }];
+
+  return id;
+};
+
+const spotifyPlaylistCreate = (playlistName) => {
+  return uuid();
+};
+
+const songListObjectGetByID = (songListObjectID) => {
+  const songListObject = songListIDArray.find((s) => s.id === songListObjectID);
   if (!songListObject) throw new AppError(404, "Song list not found");
   return songListObject;
 };
@@ -48,10 +109,64 @@ const songObjectCheckFieldUpdates = (body) => {
   return body;
 };
 
+const usersAdd = (body) => {
+  const { spotifyUserID } = body;
+
+  if (!spotifyUserID) throw new AppError(400, "Must supply spotify user ID");
+
+  if (users.some((user) => user.spotifyUserID === spotifyUserID))
+    throw new AppError(400, "That user already exists");
+
+  const newUser = { id: uuid(), spotifyUserID };
+
+  users = [...users, newUser];
+
+  return newUser;
+};
+
+const usersGet = (userID) => {
+  const user = users.find((u) => u.id === userID);
+  if (!user) throw new AppError(404, "User not found");
+  return user;
+};
+
+const resetData = () => {
+  playlists = [
+    {
+      id: "-1",
+      name: "first playlist",
+      SpotifyplaylistID: "12345678910",
+      songListObjectID: "-1",
+    },
+  ];
+
+  songListIDArray = [
+    {
+      id: "-1",
+      songArray: [
+        {
+          id: "-1",
+          spotifyTrackID: "",
+          upvotes: 0,
+          downvotes: 0,
+          userID: "",
+        },
+      ],
+    },
+  ];
+};
+
 module.exports = {
+  usersAdd,
   playlistGetByID,
   songListObjectGetByID,
   songObjectCheckFieldUpdates,
+  playlistCreate,
+  songListObjectAddSong,
+  resetData,
+  usersGet,
+  songObjectInvalidUpdateFieldsArray,
   playlists,
   songListIDArray,
+  users,
 };
