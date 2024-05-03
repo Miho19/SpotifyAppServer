@@ -22,6 +22,8 @@ router.post("/", async (req, res) => {
 
   const Auth0 = new Auth0Manager();
 
+  console.log(auth0ID);
+
   const auth0Response = await Auth0.FetchUserProfile(auth0ID);
 
   const identityObject = auth0Response.identities[0];

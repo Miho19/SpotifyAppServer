@@ -31,7 +31,8 @@ let users = [
     spotifyUserID: "12345",
     sessionID: "",
     auth0ID: "",
-    spotifyUserObject: {},
+    privateUserObject: {},
+    publicUserObject: {},
   },
 ];
 
