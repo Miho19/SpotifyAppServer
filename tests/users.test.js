@@ -1,5 +1,5 @@
 const request = require("supertest");
-const app = require("../app");
+const { app } = require("../app");
 
 const { v4: uuid } = require("uuid");
 const { usersAdd } = require("../src/utils");

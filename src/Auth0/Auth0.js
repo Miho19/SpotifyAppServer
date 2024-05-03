@@ -2,8 +2,11 @@ const { AppError } = require("../errors/AppError");
 
 class Auth0Manager {
   #accessToken;
-
-  constructor() {}
+  static #instance;
+  constructor() {
+    if (!Auth0Manager.#instance) Auth0Manager.#instance = this;
+    return Auth0Manager.#instance;
+  }
 
   async initialise() {
     if (this.#accessToken) return;

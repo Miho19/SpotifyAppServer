@@ -132,6 +132,10 @@ const usersAdd = (body) => {
   return newUser;
 };
 
+const _userAdd = (userObject) => {
+  users = [...users, userObject];
+};
+
 const usersGet = (userID) => {
   const user = users.find((u) => u.id === userID);
   if (!user) throw new AppError(404, "User not found");
@@ -179,6 +183,7 @@ module.exports = {
   resetData,
   usersGet,
   UserGetBySessionID,
+  _userAdd,
   songObjectInvalidUpdateFieldsArray,
   playlists,
   songListIDArray,

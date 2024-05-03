@@ -1,5 +1,3 @@
-const request = require("supertest");
-const app = require("../app");
 const Auth0Manager = require("../src/Auth0/Auth0");
 
 const initialiseMock = jest.spyOn(Auth0Manager.prototype, "initialise");
