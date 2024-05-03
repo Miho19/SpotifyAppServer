@@ -25,7 +25,15 @@ let songListIDArray = [
   },
 ];
 
-let users = [{ id: "-1", spotifyUserID: "12345" }];
+let users = [
+  {
+    id: "-1",
+    spotifyUserID: "12345",
+    sessionID: "",
+    auth0ID: "",
+    spotifyUserObject: {},
+  },
+];
 
 const songListObjectAddSong = (
   songListObjectID,
@@ -156,6 +164,11 @@ const resetData = () => {
   ];
 };
 
+const UserGetBySessionID = (sessionID) => {
+  const userObject = users.find((user) => user.sessionID === sessionID);
+  return userObject;
+};
+
 module.exports = {
   usersAdd,
   playlistGetByID,
@@ -165,6 +178,7 @@ module.exports = {
   songListObjectAddSong,
   resetData,
   usersGet,
+  UserGetBySessionID,
   songObjectInvalidUpdateFieldsArray,
   playlists,
   songListIDArray,
