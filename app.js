@@ -9,7 +9,7 @@ const indexRouter = require("./routes/index");
 const userRouter = require("./routes/users");
 
 const { errorHandler } = require("./src/errors/AppError");
-const { spotifyApiInitialise } = require("./src/spotifyApi/init");
+const Auth0Manager = require("./src/Auth0/Auth0");
 
 const app = express();
 
@@ -25,6 +25,10 @@ app.use(session({ secret: uuid(), resave: false, saveUninitialized: true }));
 
 app.use(errorHandler);
 
-spotifyApiInitialise();
+const Auth0 = new Auth0Manager();
+
+Auth0.initialise()
+  .then(async (response) => {})
+  .catch((err) => console.log(err));
 
 module.exports = app;
