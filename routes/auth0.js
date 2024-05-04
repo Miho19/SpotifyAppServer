@@ -20,32 +20,33 @@ router.post("/", async (req, res) => {
   const { auth0ID } = req.body;
   if (!auth0ID) throw new AppError(400, "Missing Auth0 User ID");
 
-  const Auth0 = new Auth0Manager();
+  try {
+    const Auth0 = new Auth0Manager();
+    const auth0Response = await Auth0.FetchUserProfile(auth0ID);
 
-  console.log(auth0ID);
+    const identityObject = auth0Response.identities[0];
 
-  const auth0Response = await Auth0.FetchUserProfile(auth0ID);
+    const outUserObject = {
+      spotifyUserID: identityObject.user_id,
+      image: auth0Response.images[1],
+      displayName: auth0Response.display_name,
+    };
 
-  const identityObject = auth0Response.identities[0];
+    const newUserObject = {
+      id: uuid(),
+      sessionID,
+      auth0ID,
+      privateUserObject: identityObject,
+      publicUserObject: outUserObject,
+    };
 
-  const outUserObject = {
-    spotifyUserID: identityObject.user_id,
-    image: auth0Response.images[1],
-    displayName: auth0Response.display_name,
-  };
+    // temp function to simulate adding to database
+    _userAdd(newUserObject);
 
-  const newUserObject = {
-    id: uuid(),
-    sessionID,
-    auth0ID,
-    privateUserObject: identityObject,
-    publicUserObject: outUserObject,
-  };
-
-  // temp function to simulate adding to database
-  _userAdd(newUserObject);
-
-  res.status(200).json({ ...outUserObject });
+    res.status(200).json({ ...outUserObject });
+  } catch (err) {
+    res.status(500, "Error fetching user details");
+  }
 });
 
 module.exports = router;
