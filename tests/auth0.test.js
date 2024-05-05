@@ -1,11 +1,23 @@
 const Auth0Manager = require("../src/Auth0/Auth0Manager");
 const Auth0UserProfile = require("../src/Auth0/Auth0UserProfile");
+const request = require("supertest");
+const { app } = require("../app");
+const { v4: uuid } = require("uuid");
+const { _userAdd } = require("../src/utils");
 
 //const initialiseMock = jest.spyOn(Auth0Manager.prototype, "initialise");
 
 const auth0TestProfile = {
   auth0ID: "oauth2|spotify|spotify:user:1253470477",
   testDisplayName: "Josh April",
+};
+
+const existingTestProfile = {
+  id: uuid(),
+  sessionID: uuid(),
+  auth0ID: uuid(),
+  privateUserObject: {},
+  publicUserObject: {},
 };
 
 describe("Auth0", () => {
@@ -42,6 +54,43 @@ describe("Auth0", () => {
       const userProfile = await userProfileManager.FetchUserProfile();
       expect(userProfile).toBeTruthy();
       expect(userProfile.display_name === auth0TestProfile.testDisplayName);
+    });
+  });
+
+  describe("Auth0 Route", () => {
+    describe("Creating a user", () => {
+      test("POST /auth0 should create a new user and return display profile", () => {
+        return request(app)
+          .post("/auth0")
+          .send({ auth0ID: auth0TestProfile.auth0ID })
+          .expect(200)
+          .expect("Content-Type", /json/)
+          .then((response) => {
+            const body = response.body;
+            expect(body).toEqual(
+              expect.objectContaining({
+                spotifyUserID: expect.any(String),
+                image: expect.any(Object),
+                displayName: expect.any(String),
+              })
+            );
+          });
+      });
+    });
+
+    describe("Retrieving already created user", () => {
+      beforeAll(async () => {
+        await request(app)
+          .post("/auth0")
+          .send({ auth0ID: auth0TestProfile.auth0ID });
+      });
+
+      beforeEach(() => jest.restoreAllMocks());
+
+      test("Auth0UserProfile fetchUserProfile should not be called", async () => {
+        const spy = jest.spyOn(Auth0UserProfile.prototype, "FetchUserProfile");
+        expect(spy).not.toHaveBeenCalled();
+      });
     });
   });
 });
