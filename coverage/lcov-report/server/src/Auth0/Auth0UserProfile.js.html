@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for server/routes/playlist.js</title>
+    <title>Code coverage report for server/src/Auth0/Auth0UserProfile.js</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../prettify.css" />
-    <link rel="stylesheet" href="../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../favicon.png" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../sort-arrow-sprite.png);
+            background-image: url(../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">server/routes</a> playlist.js</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">server/src/Auth0</a> Auth0UserProfile.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">88.09% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>33/33</span>
+                <span class='fraction'>37/42</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>3/3</span>
+                <span class='fraction'>3/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">88.09% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>33/33</span>
+                <span class='fraction'>37/42</span>
             </div>
         
             
@@ -96,7 +96,25 @@
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
 <a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -120,48 +138,57 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const express = require("express");
-const router = express.Router();
-const songsRouter = require("./songs");
-const { playlistGetByID } = require("../src/utils");
-let { playlists } = require("../src/utils");
-const { v4: uuid } = require("uuid");
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const { AppError } = require("../errors/AppError");
 &nbsp;
-router.get("/", (req, res) =&gt; {
-  res.status(200).json(playlists);
-});
+class Auth0UserProfile {
+  #AuthenticationManager;
+  #Auth0UserID;
+  constructor(Auth0Manager, Auth0UserID) {
+    if (!Auth0Manager.auth0AccessToken) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
+<span class="cstat-no" title="statement not covered" >      Auth0Manager.initialise()</span>
+<span class="cstat-no" title="statement not covered" >        .then((response) =&gt; (this.#AuthenticationManager = Auth0Manager))</span>
+<span class="cstat-no" title="statement not covered" >        .catch((err) =&gt; console.log(err));</span>
+    } else {
+      this.#AuthenticationManager = Auth0Manager;
+    }
 &nbsp;
-router.post("/", (req, res) =&gt; {
-  const body = req.body;
-  const newPlaylist = {
-    ...body,
-    id: uuid(),
-    SpotifyplaylistID: uuid(),
-  };
-  playlists = [...playlists, newPlaylist];
+    if (!Auth0UserID) <span class="branch-0 cbranch-no" title="branch not covered" >throw new AppError(500, "Internal Server Error");</span>
+    this.#Auth0UserID = Auth0UserID;
+  }
 &nbsp;
-  res.status(201).json(newPlaylist);
-});
+  async FetchUserProfile() {
+    const accessToken = this.#AuthenticationManager.auth0AccessToken;
 &nbsp;
-router.get("/:playlistID", (req, res) =&gt; {
-  const { playlistID } = req.params;
+    let options = {
+      method: "GET",
+      headers: { authorization: `Bearer ${accessToken}` },
+    };
 &nbsp;
-  const playlist = playlistGetByID(playlistID);
-  res.status(200).json(playlist);
-});
+    try {
+      const response = await fetch(
+        `${process.env.AUTH0MANAGEMENTDOMAIN}/api/v2/users/${
+          this.#Auth0UserID
+        }`,
+        options
+      );
+      const body = await response.json();
+      return body;
+    } <span class="branch-0 cbranch-no" title="branch not covered" >catch (err) {</span>
+<span class="cstat-no" title="statement not covered" >      console.log(err);</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
+  }
+}
 &nbsp;
-router.use("/:playlistID/songs", songsRouter);
-&nbsp;
-module.exports = router;
+module.exports = Auth0UserProfile;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -171,14 +198,14 @@ module.exports = router;
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
                 at 2024-05-05T06:21:03.781Z
             </div>
-        <script src="../../prettify.js"></script>
+        <script src="../../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../sorter.js"></script>
-        <script src="../../block-navigation.js"></script>
+        <script src="../../../sorter.js"></script>
+        <script src="../../../block-navigation.js"></script>
     </body>
 </html>
     

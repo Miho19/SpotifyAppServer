@@ -4,7 +4,8 @@ const router = express.Router();
 
 const { v4: uuid } = require("uuid");
 
-const Auth0Manager = require("../src/Auth0/Auth0");
+const Auth0Manager = require("../src/Auth0/Auth0Manager");
+const Auth0UserProfile = require("../src/Auth0/Auth0UserProfile");
 
 const { UserGetBySessionID, _userAdd } = require("../src/utils");
 
@@ -21,15 +22,17 @@ router.post("/", async (req, res) => {
   if (!auth0ID) throw new AppError(400, "Missing Auth0 User ID");
 
   try {
-    const Auth0 = new Auth0Manager();
-    const auth0Response = await Auth0.FetchUserProfile(auth0ID);
+    const auth0Manager = new Auth0Manager();
+    await auth0Manager.initialise();
+    const userProfileManager = new Auth0UserProfile(auth0Manager, auth0ID);
+    const userProfile = await userProfileManager.FetchUserProfile();
 
-    const identityObject = auth0Response.identities[0];
+    const identityObject = userProfile.identities[0];
 
     const outUserObject = {
       spotifyUserID: identityObject.user_id,
-      image: auth0Response.images[1],
-      displayName: auth0Response.display_name,
+      image: userProfile.images[1],
+      displayName: userProfile.display_name,
     };
 
     const newUserObject = {

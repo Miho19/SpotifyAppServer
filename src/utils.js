@@ -118,21 +118,6 @@ const songObjectCheckFieldUpdates = (body) => {
   return body;
 };
 
-const usersAdd = (body) => {
-  const { spotifyUserID } = body;
-
-  if (!spotifyUserID) throw new AppError(400, "Must supply spotify user ID");
-
-  if (users.some((user) => user.spotifyUserID === spotifyUserID))
-    throw new AppError(400, "That user already exists");
-
-  const newUser = { id: uuid(), spotifyUserID };
-
-  users = [...users, newUser];
-
-  return newUser;
-};
-
 const _userAdd = (userObject) => {
   users = [...users, userObject];
 };
@@ -175,7 +160,6 @@ const UserGetBySessionID = (sessionID) => {
 };
 
 module.exports = {
-  usersAdd,
   playlistGetByID,
   songListObjectGetByID,
   songObjectCheckFieldUpdates,

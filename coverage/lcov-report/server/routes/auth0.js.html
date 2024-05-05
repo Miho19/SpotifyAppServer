@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">27.45% </span>
+                <span class="strong">27.27% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>14/51</span>
+                <span class='fraction'>15/55</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">27.45% </span>
+                <span class="strong">27.27% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>14/51</span>
+                <span class='fraction'>15/55</span>
             </div>
         
             
@@ -114,7 +114,11 @@
 <a name='L49'></a><a href='#L49'>49</a>
 <a name='L50'></a><a href='#L50'>50</a>
 <a name='L51'></a><a href='#L51'>51</a>
-<a name='L52'></a><a href='#L52'>52</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -125,6 +129,10 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -171,7 +179,8 @@ const router = express.Router();
 &nbsp;
 const { v4: uuid } = require("uuid");
 &nbsp;
-const Auth0Manager = require("../src/Auth0/Auth0");
+const Auth0Manager = require("../src/Auth0/Auth0Manager");
+const Auth0UserProfile = require("../src/Auth0/Auth0UserProfile");
 &nbsp;
 const { UserGetBySessionID, _userAdd } = require("../src/utils");
 &nbsp;
@@ -187,32 +196,35 @@ router.post("/", async (req, res) =&gt; {
 <span class="cstat-no" title="statement not covered" >  const { auth0ID } = req.body;</span>
 <span class="cstat-no" title="statement not covered" >  if (!auth0ID) throw new AppError(400, "Missing Auth0 User ID");</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  const Auth0 = new Auth0Manager();</span>
+<span class="cstat-no" title="statement not covered" >  try {</span>
+<span class="cstat-no" title="statement not covered" >    const auth0Manager = new Auth0Manager();</span>
+<span class="cstat-no" title="statement not covered" >    await auth0Manager.initialise();</span>
+<span class="cstat-no" title="statement not covered" >    const userProfileManager = new Auth0UserProfile(auth0Manager, auth0ID);</span>
+<span class="cstat-no" title="statement not covered" >    const userProfile = await userProfileManager.FetchUserProfile();</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  console.log(auth0ID);</span>
+<span class="cstat-no" title="statement not covered" >    const identityObject = userProfile.identities[0];</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  const auth0Response = await Auth0.FetchUserProfile(auth0ID);</span>
+<span class="cstat-no" title="statement not covered" >    const outUserObject = {</span>
+<span class="cstat-no" title="statement not covered" >      spotifyUserID: identityObject.user_id,</span>
+<span class="cstat-no" title="statement not covered" >      image: userProfile.images[1],</span>
+<span class="cstat-no" title="statement not covered" >      displayName: userProfile.display_name,</span>
+<span class="cstat-no" title="statement not covered" >    };</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  const identityObject = auth0Response.identities[0];</span>
+<span class="cstat-no" title="statement not covered" >    const newUserObject = {</span>
+<span class="cstat-no" title="statement not covered" >      id: uuid(),</span>
+<span class="cstat-no" title="statement not covered" >      sessionID,</span>
+<span class="cstat-no" title="statement not covered" >      auth0ID,</span>
+<span class="cstat-no" title="statement not covered" >      privateUserObject: identityObject,</span>
+<span class="cstat-no" title="statement not covered" >      publicUserObject: outUserObject,</span>
+<span class="cstat-no" title="statement not covered" >    };</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  const outUserObject = {</span>
-<span class="cstat-no" title="statement not covered" >    spotifyUserID: identityObject.user_id,</span>
-<span class="cstat-no" title="statement not covered" >    image: auth0Response.images[1],</span>
-<span class="cstat-no" title="statement not covered" >    displayName: auth0Response.display_name,</span>
-<span class="cstat-no" title="statement not covered" >  };</span>
+<span class="cstat-no" title="statement not covered" >    // temp function to simulate adding to database</span>
+<span class="cstat-no" title="statement not covered" >    _userAdd(newUserObject);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  const newUserObject = {</span>
-<span class="cstat-no" title="statement not covered" >    id: uuid(),</span>
-<span class="cstat-no" title="statement not covered" >    sessionID,</span>
-<span class="cstat-no" title="statement not covered" >    auth0ID,</span>
-<span class="cstat-no" title="statement not covered" >    privateUserObject: identityObject,</span>
-<span class="cstat-no" title="statement not covered" >    publicUserObject: outUserObject,</span>
-<span class="cstat-no" title="statement not covered" >  };</span>
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  // temp function to simulate adding to database</span>
-<span class="cstat-no" title="statement not covered" >  _userAdd(newUserObject);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  res.status(200).json({ ...outUserObject });</span>
+<span class="cstat-no" title="statement not covered" >    res.status(200).json({ ...outUserObject });</span>
+<span class="cstat-no" title="statement not covered" >  } catch (err) {</span>
+<span class="cstat-no" title="statement not covered" >    res.status(500, "Error fetching user details");</span>
+<span class="cstat-no" title="statement not covered" >  }</span>
 });
 &nbsp;
 module.exports = router;
@@ -223,7 +235,7 @@ module.exports = router;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-03T12:56:24.764Z
+                at 2024-05-05T06:21:03.781Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

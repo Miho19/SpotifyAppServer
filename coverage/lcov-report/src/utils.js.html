@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">89.18% </span>
+                <span class="strong">94.88% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>165/185</span>
+                <span class='fraction'>167/176</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">89.18% </span>
+                <span class="strong">94.88% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>165/185</span>
+                <span class='fraction'>167/176</span>
             </div>
         
             
@@ -239,16 +239,8 @@
 <a name='L174'></a><a href='#L174'>174</a>
 <a name='L175'></a><a href='#L175'>175</a>
 <a name='L176'></a><a href='#L176'>176</a>
-<a name='L177'></a><a href='#L177'>177</a>
-<a name='L178'></a><a href='#L178'>178</a>
-<a name='L179'></a><a href='#L179'>179</a>
-<a name='L180'></a><a href='#L180'>180</a>
-<a name='L181'></a><a href='#L181'>181</a>
-<a name='L182'></a><a href='#L182'>182</a>
-<a name='L183'></a><a href='#L183'>183</a>
-<a name='L184'></a><a href='#L184'>184</a>
-<a name='L185'></a><a href='#L185'>185</a>
-<a name='L186'></a><a href='#L186'>186</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L177'></a><a href='#L177'>177</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -370,17 +362,6 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -418,6 +399,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -466,7 +448,8 @@ let users = [
     spotifyUserID: "12345",
     sessionID: "",
     auth0ID: "",
-    spotifyUserObject: {},
+    privateUserObject: {},
+    publicUserObject: {},
   },
 ];
 &nbsp;
@@ -552,19 +535,8 @@ const songObjectCheckFieldUpdates = (body) =&gt; {
   return body;
 };
 &nbsp;
-const usersAdd = (<span class="fstat-no" title="function not covered" >body) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  const { spotifyUserID } = body;</span>
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  if (!spotifyUserID) throw new AppError(400, "Must supply spotify user ID");</span>
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  if (users.some((user) =&gt; user.spotifyUserID === spotifyUserID))</span>
-<span class="cstat-no" title="statement not covered" >    throw new AppError(400, "That user already exists");</span>
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  const newUser = { id: uuid(), spotifyUserID };</span>
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  users = [...users, newUser];</span>
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  return newUser;</span>
+const _userAdd = (<span class="fstat-no" title="function not covered" >userObject) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  users = [...users, userObject];</span>
 <span class="cstat-no" title="statement not covered" >};</span>
 &nbsp;
 const usersGet = (<span class="fstat-no" title="function not covered" >userID) =&gt; {</span>
@@ -605,7 +577,6 @@ const UserGetBySessionID = (<span class="fstat-no" title="function not covered" 
 <span class="cstat-no" title="statement not covered" >};</span>
 &nbsp;
 module.exports = {
-  usersAdd,
   playlistGetByID,
   songListObjectGetByID,
   songObjectCheckFieldUpdates,
@@ -613,6 +584,8 @@ module.exports = {
   songListObjectAddSong,
   resetData,
   usersGet,
+  UserGetBySessionID,
+  _userAdd,
   songObjectInvalidUpdateFieldsArray,
   playlists,
   songListIDArray,
@@ -625,7 +598,7 @@ module.exports = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-03T10:50:16.054Z
+                at 2024-05-05T04:57:42.692Z
             </div>
         <script src="../prettify.js"></script>
         <script>
