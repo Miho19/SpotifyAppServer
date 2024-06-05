@@ -25,7 +25,16 @@ let songListIDArray = [
   },
 ];
 
-let users = [{ id: "-1", spotifyUserID: "12345" }];
+let users = [
+  {
+    id: "-1",
+    spotifyUserID: "12345",
+    sessionID: "",
+    auth0ID: "",
+    privateUserObject: {},
+    publicUserObject: {},
+  },
+];
 
 const songListObjectAddSong = (
   songListObjectID,
@@ -109,19 +118,8 @@ const songObjectCheckFieldUpdates = (body) => {
   return body;
 };
 
-const usersAdd = (body) => {
-  const { spotifyUserID } = body;
-
-  if (!spotifyUserID) throw new AppError(400, "Must supply spotify user ID");
-
-  if (users.some((user) => user.spotifyUserID === spotifyUserID))
-    throw new AppError(400, "That user already exists");
-
-  const newUser = { id: uuid(), spotifyUserID };
-
-  users = [...users, newUser];
-
-  return newUser;
+const _userAdd = (userObject) => {
+  users = [...users, userObject];
 };
 
 const usersGet = (userID) => {
@@ -156,8 +154,12 @@ const resetData = () => {
   ];
 };
 
+const UserGetBySessionID = (sessionID) => {
+  const userObject = users.find((user) => user.sessionID === sessionID);
+  return userObject;
+};
+
 module.exports = {
-  usersAdd,
   playlistGetByID,
   songListObjectGetByID,
   songObjectCheckFieldUpdates,
@@ -165,6 +167,8 @@ module.exports = {
   songListObjectAddSong,
   resetData,
   usersGet,
+  UserGetBySessionID,
+  _userAdd,
   songObjectInvalidUpdateFieldsArray,
   playlists,
   songListIDArray,
