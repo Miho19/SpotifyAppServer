@@ -4,10 +4,9 @@ const router = express.Router();
 
 const { v4: uuid } = require("uuid");
 
-const Auth0Manager = require("../src/Auth0/Auth0Manager");
-const Auth0UserProfile = require("../src/Auth0/Auth0UserProfile");
-
 const { UserGetBySessionID, _userAdd } = require("../src/utils");
+const { spotifyGetUserObject } = require("../src/spotifyApi/spotifyUtility");
+const { auth0CreateNewUserObject } = require("../src/Auth0/Auth0Utility");
 
 router.post("/", async (req, res) => {
   const { id: sessionID } = req.session;
@@ -21,35 +20,13 @@ router.post("/", async (req, res) => {
   const { auth0ID } = req.body;
   if (!auth0ID) throw new AppError(400, "Missing Auth0 User ID");
 
-  try {
-    const auth0Manager = new Auth0Manager();
-    await auth0Manager.initialise();
-    const userProfileManager = new Auth0UserProfile(auth0Manager, auth0ID);
-    const userProfile = await userProfileManager.FetchUserProfile();
+  const newAuth0UserObject = await auth0CreateNewUserObject(sessionID, auth0ID);
+  // temp function to simulate adding to database
+  _userAdd(newAuth0UserObject);
 
-    const identityObject = userProfile.identities[0];
+  const spotifyUserObject = await spotifyGetUserObject(newAuth0UserObject);
 
-    const outUserObject = {
-      spotifyUserID: identityObject.user_id,
-      image: userProfile.images[1],
-      displayName: userProfile.display_name,
-    };
-
-    const newUserObject = {
-      id: uuid(),
-      sessionID,
-      auth0ID,
-      privateUserObject: identityObject,
-      publicUserObject: outUserObject,
-    };
-
-    // temp function to simulate adding to database
-    _userAdd(newUserObject);
-
-    res.status(200).json({ ...outUserObject });
-  } catch (err) {
-    res.status(500, "Error fetching user details");
-  }
+  res.status(200).json({ ...spotifyUserObject });
 });
 
 module.exports = router;

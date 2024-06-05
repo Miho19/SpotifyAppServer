@@ -9,6 +9,7 @@ const playlistRouter = require("./routes/playlist");
 const indexRouter = require("./routes/index");
 const userRouter = require("./routes/users");
 const auth0Router = require("./routes/auth0");
+const spotifyRouter = require("./routes/spotify");
 
 const { errorHandler } = require("./src/errors/AppError");
 
@@ -30,6 +31,8 @@ app.use(
 app.use("/playlists", playlistRouter);
 app.use("/users", userRouter);
 app.use("/auth0", auth0Router);
+app.use("/spotify", spotifyRouter);
+
 app.use(indexRouter);
 app.use(errorHandler);
 
