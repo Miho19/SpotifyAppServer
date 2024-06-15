@@ -3,9 +3,6 @@ const Auth0UserProfile = require("../src/Auth0/Auth0UserProfile");
 const request = require("supertest");
 const { app } = require("../app");
 const { v4: uuid } = require("uuid");
-const { _userAdd } = require("../src/utils");
-
-//const initialiseMock = jest.spyOn(Auth0Manager.prototype, "initialise");
 
 const auth0TestProfile = {
   auth0ID: "oauth2|spotify|spotify:user:1253470477",
