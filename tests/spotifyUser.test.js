@@ -1,15 +1,15 @@
-const request = require("supertest");
-const Auth0Manager = require("../src/Auth0/Auth0Manager");
 const { auth0CreateNewUserObject } = require("../src/Auth0/Auth0Utility");
 const { SpotifyUserManager } = require("../src/spotifyApi/SpotifyUserManager");
 const {
   spotifyRetrieveUserObject,
+  spotifyRetrieveAllUserPlaylists,
 } = require("../src/spotifyApi/spotifyUtility");
 const { AppError } = require("../src/errors/AppError");
 
 const auth0TestProfile = {
   auth0ID: "oauth2|spotify|spotify:user:1253470477",
   testDisplayName: "Josh April",
+  spotifyUserID: "1253470477",
 };
 
 describe("Spotify Utility Tests", () => {
@@ -34,14 +34,14 @@ describe("Spotify Utility Tests", () => {
   });
 
   describe("Spotify API User Profile", () => {
-    test.skip("Spotify getting me user profile", () => {
-      const queryUserID = "me";
-      const response = spotifyRetrieveUserObject(
+    test("Spotify getting me user profile", async () => {
+      const queryUserID = auth0TestProfile.spotifyUserID;
+      const response = await spotifyRetrieveUserObject(
         spotifyUserManager,
         queryUserID
       );
 
-      expect(response).toBe(
+      expect(response).toEqual(
         expect.objectContaining({
           spotifyUserID: expect.any(String),
           displayName: expect.any(String),
@@ -49,31 +49,54 @@ describe("Spotify Utility Tests", () => {
         })
       );
     });
+
+    test("Spotify getting invalid user profile, invalid query ID", async () => {
+      const queryUserID = "";
+
+      try {
+        const response = await spotifyRetrieveUserObject(
+          spotifyUserManager,
+          queryUserID
+        );
+      } catch (error) {
+        expect(error).toBeInstanceOf(AppError);
+        expect(error).toHaveProperty("statusCode", 500);
+        expect(error).toHaveProperty("message", "User ID Missing");
+      }
+    });
+
+    test("Spotify getting invalid user profile, invalid spotify user manager", async () => {
+      const queryUserID = "me";
+      try {
+        const response = await spotifyRetrieveUserObject(null, queryUserID);
+      } catch (error) {
+        expect(error).toBeInstanceOf(AppError);
+        expect(error).toHaveProperty("statusCode", 500);
+        expect(error).toHaveProperty("message", "Spotify User Manager Missing");
+      }
+    });
   });
 
-  test("Spotify getting invalid user profile, invalid query ID", async () => {
-    const queryUserID = "";
+  describe("Spotify API User Playlists", () => {
+    test("Retrieve current user playlists", async () => {
+      const queryUserID = auth0TestProfile.spotifyUserID;
 
-    try {
-      const response = await spotifyRetrieveUserObject(
+      const response = await spotifyRetrieveAllUserPlaylists(
         spotifyUserManager,
         queryUserID
       );
-    } catch (error) {
-      expect(error).toBeInstanceOf(AppError);
-      expect(error).toHaveProperty("statusCode", 500);
-      expect(error).toHaveProperty("message", "User ID Missing");
-    }
-  });
+      expect(response).toBeTruthy();
 
-  test("Spotify getting invalid user profile, invalid spotify user manager", async () => {
-    const queryUserID = "me";
-    try {
-      const response = await spotifyRetrieveUserObject(null, queryUserID);
-    } catch (error) {
-      expect(error).toBeInstanceOf(AppError);
-      expect(error).toHaveProperty("statusCode", 500);
-      expect(error).toHaveProperty("message", "Spotify User Manager Missing");
-    }
+      expect(response).toEqual(
+        expect.objectContaining({
+          limit: expect.any(Number),
+          offset: expect.any(Number),
+          next: expect.anything(),
+          previous: expect.anything(),
+          total: expect.any(Number),
+          items: expect.anything(),
+        })
+      );
+    });
   });
 });

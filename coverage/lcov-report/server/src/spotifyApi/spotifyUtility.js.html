@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">95.91% </span>
+                <span class="strong">81.63% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>47/49</span>
+                <span class='fraction'>40/49</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">88.88% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>8/9</span>
+                <span class='fraction'>5/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>3/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">95.91% </span>
+                <span class="strong">81.63% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>47/49</span>
+                <span class='fraction'>40/49</span>
             </div>
         
             
@@ -128,37 +128,37 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const { AppError } = require("../errors/AppError");
@@ -186,8 +186,8 @@ async function spotifyRetrieveUserObject(spotifyUserManager, queryUserID) {
     const response = await fetch(
       `https://api.spotify.com/v1/${queryUserID}`,
       options
-    );
-  } <span class="branch-0 cbranch-no" title="branch not covered" >catch (err) {</span>
+    )<span class="branch-0 cbranch-no" title="branch not covered" >;</span>
+<span class="cstat-no" title="statement not covered" >  } catch (err) {</span>
 <span class="cstat-no" title="statement not covered" >    console.log(err);</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 }
@@ -197,17 +197,17 @@ function spotifyRetrieveUserObjectParameterValidation(
   queryUserID
 ) {
   if (!spotifyUserManager || !spotifyUserManager.accessToken)
-    new AppError(500, "Missing Spotify User Manager");
+    throw new AppError(500, "Spotify User Manager Missing");
 &nbsp;
-  if (!queryUserID) new AppError(500, "Query for User ID is Missing");
+  if (!queryUserID) throw new AppError(500, "User ID Missing");
 }
 &nbsp;
-function spotifyAPIGenerateOptionsObject(spotifyUserManager, methodType) {
-  return {
-    method: methodType,
-    headers: { Authorization: `Bearer ${spotifyUserManager.accessToken}` },
-  };
-}
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >function spotifyAPIGenerateOptionsObject(spotifyUserManager, methodType) {</span></span>
+<span class="cstat-no" title="statement not covered" >  return {</span>
+<span class="cstat-no" title="statement not covered" >    method: methodType,</span>
+<span class="cstat-no" title="statement not covered" >    headers: { Authorization: `Bearer ${spotifyUserManager.accessToken}` },</span>
+<span class="cstat-no" title="statement not covered" >  };</span>
+<span class="cstat-no" title="statement not covered" >}</span>
 &nbsp;
 module.exports = { spotifyGetUserObject, spotifyRetrieveUserObject };
 &nbsp;</pre></td></tr></table></pre>
@@ -217,7 +217,7 @@ module.exports = { spotifyGetUserObject, spotifyRetrieveUserObject };
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-15T17:46:11.722Z
+                at 2024-06-16T19:03:03.233Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
