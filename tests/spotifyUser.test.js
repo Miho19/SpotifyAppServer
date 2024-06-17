@@ -3,6 +3,7 @@ const { SpotifyUserManager } = require("../src/spotifyApi/SpotifyUserManager");
 const {
   spotifyRetrieveUserObject,
   spotifyRetrieveAllUserPlaylists,
+  spotifyRetrievePlaylist,
 } = require("../src/spotifyApi/spotifyUtility");
 const { AppError } = require("../src/errors/AppError");
 
@@ -10,6 +11,7 @@ const auth0TestProfile = {
   auth0ID: "oauth2|spotify|spotify:user:1253470477",
   testDisplayName: "Josh April",
   spotifyUserID: "1253470477",
+  playlist: { id: "5KWkZqoYeVXWEgdxbKlTSM", name: "Bogan Girl " },
 };
 
 describe("Spotify Utility Tests", () => {
@@ -61,7 +63,7 @@ describe("Spotify Utility Tests", () => {
       } catch (error) {
         expect(error).toBeInstanceOf(AppError);
         expect(error).toHaveProperty("statusCode", 500);
-        expect(error).toHaveProperty("message", "User ID Missing");
+        expect(error).toHaveProperty("message", "Query ID Missing");
       }
     });
 
@@ -77,7 +79,7 @@ describe("Spotify Utility Tests", () => {
     });
   });
 
-  describe("Spotify API User Playlists", () => {
+  describe("Spotify API User All Playlists", () => {
     test("Retrieve current user playlists", async () => {
       const queryUserID = auth0TestProfile.spotifyUserID;
 
@@ -91,12 +93,24 @@ describe("Spotify Utility Tests", () => {
         expect.objectContaining({
           limit: expect.any(Number),
           offset: expect.any(Number),
-          next: expect.anything(),
-          previous: expect.anything(),
+          next: expect.any(String),
+          previous: expect.any(String),
           total: expect.any(Number),
           items: expect.anything(),
         })
       );
+    });
+  });
+
+  describe("Spotify API Playlist", () => {
+    test("Retrieving a valid playlist", async () => {
+      const { id: playlistID } = auth0TestProfile.playlist;
+      const response = await spotifyRetrievePlaylist(
+        spotifyUserManager,
+        playlistID
+      );
+
+      expect(response).toBeTruthy();
     });
   });
 });
