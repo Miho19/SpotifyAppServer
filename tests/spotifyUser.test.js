@@ -112,5 +112,23 @@ describe("Spotify Utility Tests", () => {
 
       expect(response).toBeTruthy();
     });
+
+    test("Retrieving an invalid playlist", async () => {
+      const playlistID = "1231";
+
+      try {
+        const response = await spotifyRetrievePlaylist(
+          spotifyUserManager,
+          playlistID
+        );
+      } catch (error) {
+        expect(error).toBeInstanceOf(AppError);
+        expect(error).toHaveProperty("statusCode", 400);
+        expect(error).toHaveProperty(
+          "message",
+          `Failed to retrieve playlist: ${playlistID}`
+        );
+      }
+    });
   });
 });
