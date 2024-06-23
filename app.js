@@ -2,7 +2,6 @@ require("dotenv").config();
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
-const { v4: uuid } = require("uuid");
 const cors = require("cors");
 
 const playlistRouter = require("./routes/playlist");

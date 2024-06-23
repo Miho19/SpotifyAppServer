@@ -26,9 +26,10 @@ router.get("/users/:userID/playlists", (req, res) => {
   const { userID: userSessionID } = req.session;
   const userObject = UserGetBySessionID(userSessionID);
 
-  return res.status(200).json({ error: "should not be here" });
   if (!userObject)
     throw new AppError(400, "User does not have a valid session");
+
+  return res.status(200).json({ error: "should not be here" });
 });
 
 module.exports = router;
