@@ -7,12 +7,7 @@ const {
 } = require("../src/spotifyApi/spotifyUtility");
 const { AppError } = require("../src/errors/AppError");
 
-const auth0TestProfile = {
-  auth0ID: "oauth2|spotify|spotify:user:1253470477",
-  testDisplayName: "Josh April",
-  spotifyUserID: "1253470477",
-  playlist: { id: "5KWkZqoYeVXWEgdxbKlTSM", name: "Bogan Girl " },
-};
+const { auth0TestProfile } = require("./spotifyUserTestUtilities");
 
 describe("Spotify Utility Tests", () => {
   let spotifyUserManager;

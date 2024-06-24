@@ -5,7 +5,9 @@ const router = express.Router();
 const { v4: uuid } = require("uuid");
 
 const { UserGetBySessionID, _userAdd } = require("../src/utils");
-const { spotifyGetUserObject } = require("../src/spotifyApi/spotifyUtility");
+const {
+  spotifyConvertAuth0UserObjectToSpotifyUserObject,
+} = require("../src/spotifyApi/spotifyUtility");
 const { auth0CreateNewUserObject } = require("../src/Auth0/Auth0Utility");
 
 router.post("/", async (req, res) => {
@@ -24,7 +26,8 @@ router.post("/", async (req, res) => {
   // temp function to simulate adding to database
   _userAdd(newAuth0UserObject);
 
-  const spotifyUserObject = await spotifyGetUserObject(newAuth0UserObject);
+  const spotifyUserObject =
+    await spotifyConvertAuth0UserObjectToSpotifyUserObject(newAuth0UserObject);
 
   res.status(200).json({ ...spotifyUserObject });
 });

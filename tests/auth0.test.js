@@ -4,10 +4,7 @@ const request = require("supertest");
 const { app } = require("../app");
 const { v4: uuid } = require("uuid");
 
-const auth0TestProfile = {
-  auth0ID: "oauth2|spotify|spotify:user:1253470477",
-  testDisplayName: "Josh April",
-};
+const { auth0TestProfile } = require("./spotifyUserTestUtilities");
 
 const existingTestProfile = {
   id: uuid(),
