@@ -1,11 +1,12 @@
 const express = require("express");
-const { UserGetBySessionID } = require("../src/utils");
 const { AppError } = require("../src/errors/AppError");
 const {
   spotifyGetUserObject,
   spotifyRetrieveAllUserPlaylists,
+  spotifyRetrievePlaylist,
 } = require("../src/spotifyApi/spotifyUtility");
 const { SpotifyUserManager } = require("../src/spotifyApi/SpotifyUserManager");
+const { routerUtilityRetrieveUserObject } = require("./routerUtility");
 const router = express.Router();
 
 /**
@@ -15,8 +16,7 @@ const router = express.Router();
  */
 
 router.get("/users/:userID", (req, res) => {
-  const { id: userSessionID } = req.session;
-  const userObject = UserGetBySessionID(userSessionID);
+  const userObject = routerUtilityRetrieveUserObject(req.session);
 
   if (!userObject)
     throw new AppError(400, "User does not have a valid session");
@@ -27,8 +27,7 @@ router.get("/users/:userID", (req, res) => {
 });
 
 router.get("/users/:userID/playlists", async (req, res) => {
-  const { id: userSessionID } = req.session;
-  const userObject = UserGetBySessionID(userSessionID);
+  const userObject = routerUtilityRetrieveUserObject(req.session);
 
   if (!userObject)
     throw new AppError(400, "User does not have a valid session");
@@ -44,6 +43,26 @@ router.get("/users/:userID/playlists", async (req, res) => {
     return res.status(200).json(response);
   } catch (error) {
     throw new AppError(500, "Could not retrieve user all playlists");
+  }
+});
+
+router.get("/users/:userID/playlists/:playlistID", async (req, res) => {
+  const userObject = routerUtilityRetrieveUserObject(req.session);
+
+  if (!userObject)
+    throw new AppError(400, "User does not have a valid session");
+
+  const spotifyUserManager = new SpotifyUserManager(userObject);
+  const { playlistID } = req.params;
+
+  try {
+    const response = await spotifyRetrievePlaylist(
+      spotifyUserManager,
+      playlistID
+    );
+    return res.status(200).json(response);
+  } catch (error) {
+    throw new AppError(500, `Could not retrieve the playlist: ${playlistID}`);
   }
 });
 

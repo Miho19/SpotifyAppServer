@@ -1,13 +1,13 @@
 /**
- * Integration tests for when frontend requests all the users playlists
- * https://stackoverflow.com/questions/14001183/how-to-authenticate-supertest-requests-with-passport
+ * Integration tests for when frontend requests an users playlist
+ *
  */
 const { app } = require("../app");
 const request = require("supertest").agent(app);
 
 const { auth0TestProfile } = require("./spotifyUserTestUtilities");
 
-describe("Spotify User All Playlists Route", () => {
+describe("Spotify User Playlist Route", () => {
   let cookie;
   beforeAll((done) => {
     request
@@ -19,12 +19,12 @@ describe("Spotify User All Playlists Route", () => {
       });
   });
 
-  test("Retrieve all playlists for an user", async () => {
+  test("Retrieve a playlist from an user", async () => {
     const sessionID = cookie[0].split(";")[0];
 
     try {
       const response = await request
-        .get("/spotify/users/me/playlists")
+        .get(`/spotify/users/me/playlists/${auth0TestProfile.playlist.id}`)
         .set("Cookie", sessionID)
         .expect("Content-Type", /json/)
         .expect(200);
@@ -34,14 +34,16 @@ describe("Spotify User All Playlists Route", () => {
       expect(body).toBeTruthy();
       expect(body).toEqual(
         expect.objectContaining({
-          limit: expect.any(Number),
-          offset: expect.any(Number),
-          next: expect.anything(),
-          previous: expect.anything(),
-          total: expect.any(Number),
-          items: expect.anything(),
+          name: auth0TestProfile.playlist.name,
+          owner: "Josh April",
+          type: "playlist",
+          link: expect.any(String),
+          image: expect.any(String),
+          tracks: expect.anything(),
         })
       );
-    } catch (error) {}
+    } catch (error) {
+      expect(error).toBeFalsy();
+    }
   });
 });

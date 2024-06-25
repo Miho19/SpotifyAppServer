@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">78% </span>
+                <span class="strong">60.86% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>39/50</span>
+                <span class='fraction'>42/69</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">78% </span>
+                <span class="strong">60.86% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>39/50</span>
+                <span class='fraction'>42/69</span>
             </div>
         
             
@@ -113,7 +113,27 @@
 <a name='L48'></a><a href='#L48'>48</a>
 <a name='L49'></a><a href='#L49'>49</a>
 <a name='L50'></a><a href='#L50'>50</a>
-<a name='L51'></a><a href='#L51'>51</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -138,8 +158,26 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -164,13 +202,14 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const express = require("express");
-const { UserGetBySessionID } = require("../src/utils");
 const { AppError } = require("../src/errors/AppError");
 const {
   spotifyGetUserObject,
   spotifyRetrieveAllUserPlaylists,
+  spotifyRetrievePlaylist,
 } = require("../src/spotifyApi/spotifyUtility");
 const { SpotifyUserManager } = require("../src/spotifyApi/SpotifyUserManager");
+const { routerUtilityRetrieveUserObject } = require("./routerUtility");
 const router = express.Router();
 &nbsp;
 /**
@@ -180,8 +219,7 @@ const router = express.Router();
  */
 &nbsp;
 router.get("/users/:userID", (req, res) =&gt; {
-<span class="cstat-no" title="statement not covered" >  const { id: userSessionID } = req.session;</span>
-<span class="cstat-no" title="statement not covered" >  const userObject = UserGetBySessionID(userSessionID);</span>
+<span class="cstat-no" title="statement not covered" >  const userObject = routerUtilityRetrieveUserObject(req.session);</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  if (!userObject)</span>
 <span class="cstat-no" title="statement not covered" >    throw new AppError(400, "User does not have a valid session");</span>
@@ -192,23 +230,42 @@ router.get("/users/:userID", (req, res) =&gt; {
 });
 &nbsp;
 router.get("/users/:userID/playlists", async (req, res) =&gt; {
-  const { id: userSessionID } = req.session;
-  const userObject = UserGetBySessionID(userSessionID);
+<span class="cstat-no" title="statement not covered" >  const userObject = routerUtilityRetrieveUserObject(req.session);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  if (!userObject)</span>
+<span class="cstat-no" title="statement not covered" >    throw new AppError(400, "User does not have a valid session");</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  const spotifyUserManager = new SpotifyUserManager(userObject);</span>
+<span class="cstat-no" title="statement not covered" >  const queryID = req.params.userID;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  try {</span>
+<span class="cstat-no" title="statement not covered" >    const response = await spotifyRetrieveAllUserPlaylists(</span>
+<span class="cstat-no" title="statement not covered" >      spotifyUserManager,</span>
+<span class="cstat-no" title="statement not covered" >      queryID</span>
+<span class="cstat-no" title="statement not covered" >    );</span>
+<span class="cstat-no" title="statement not covered" >    return res.status(200).json(response);</span>
+<span class="cstat-no" title="statement not covered" >  } catch (error) {</span>
+<span class="cstat-no" title="statement not covered" >    throw new AppError(500, "Could not retrieve user all playlists");</span>
+<span class="cstat-no" title="statement not covered" >  }</span>
+});
+&nbsp;
+router.get("/users/:userID/playlists/:playlistID", async (req, res) =&gt; {
+  const userObject = routerUtilityRetrieveUserObject(req.session);
 &nbsp;
   if (!userObject)
 <span class="branch-0 cbranch-no" title="branch not covered" >    throw new AppError(400, "User does not have a valid session");</span>
 &nbsp;
   const spotifyUserManager = new SpotifyUserManager(userObject);
-  const queryID = req.params.userID;
+  const { playlistID } = req.params;
 &nbsp;
   try {
-    const response = await spotifyRetrieveAllUserPlaylists(
+    const response = await spotifyRetrievePlaylist(
       spotifyUserManager,
-      queryID
+      playlistID
     );
     return res.status(200).json(response);
   } <span class="branch-0 cbranch-no" title="branch not covered" >catch (error) {</span>
-<span class="cstat-no" title="statement not covered" >    throw new AppError(500, "Could not retrieve user all playlists");</span>
+<span class="cstat-no" title="statement not covered" >    throw new AppError(500, `Could not retrieve the playlist: ${playlistID}`);</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 });
 &nbsp;
@@ -220,7 +277,7 @@ module.exports = router;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-24T23:47:58.638Z
+                at 2024-06-25T03:32:21.013Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

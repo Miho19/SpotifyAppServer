@@ -154,7 +154,7 @@ const resetData = () => {
   ];
 };
 
-const UserGetBySessionID = (sessionID) => {
+const userGetBySessionID = (sessionID) => {
   const userObject = users.find((user) => user.sessionID === sessionID);
   return userObject;
 };
@@ -167,7 +167,7 @@ module.exports = {
   songListObjectAddSong,
   resetData,
   usersGet,
-  UserGetBySessionID,
+  userGetBySessionID,
   _userAdd,
   songObjectInvalidUpdateFieldsArray,
   playlists,
