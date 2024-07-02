@@ -6,14 +6,6 @@ const { v4: uuid } = require("uuid");
 
 const { auth0TestProfile } = require("./spotifyUserTestUtilities");
 
-const existingTestProfile = {
-  id: uuid(),
-  sessionID: uuid(),
-  auth0ID: uuid(),
-  privateUserObject: {},
-  publicUserObject: {},
-};
-
 describe("Auth0", () => {
   describe("Auth0Manager Class", () => {
     let auth0;

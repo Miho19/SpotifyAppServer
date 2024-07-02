@@ -173,6 +173,7 @@ async function spotifyCreateUserPlaylistObjectFetchPlaylistTracks(
 
 function spotifyPlaylistObjectConvertToServerPlaylistObject(playlistObject) {
   return {
+    id: playlistObject.id,
     name: playlistObject.name,
     owner: playlistObject.owner.display_name,
     type: playlistObject.type,
@@ -182,27 +183,9 @@ function spotifyPlaylistObjectConvertToServerPlaylistObject(playlistObject) {
   };
 }
 
-async function spotifyCreateUserPlaylistsObjectPopulatePlaylistsWithtracks(
-  spotifyUserManager,
-  playlists
-) {
-  return await Promise.all(
-    playlists.map(async (playlist) => {
-      let tracks;
-      try {
-        tracks = await spotifyCreateUserPlaylistObjectFetchPlaylistTracks(
-          spotifyUserManager,
-          playlist.tracks
-        );
-      } catch (err) {
-        throw new AppError(400, "Failed to retrieve playlist tracks");
-      }
-
-      return spotifyPlaylistObjectConvertToServerPlaylistObject({
-        ...playlist,
-        tracks,
-      });
-    })
+async function spotifyCreateUserPlaylistsList(spotifyUserManager, playlists) {
+  return playlists.map((playlist) =>
+    spotifyPlaylistObjectConvertToServerPlaylistObject(playlist)
   );
 }
 
@@ -212,11 +195,10 @@ async function spotifyCreateUserPlaylistsObject(
 ) {
   let { limit, offset, next, previous, total, items } = spotifyResponse;
 
-  const tracksPopulatedPlaylists =
-    await spotifyCreateUserPlaylistsObjectPopulatePlaylistsWithtracks(
-      spotifyUserManager,
-      items
-    );
+  const userPlaylistsList = await spotifyCreateUserPlaylistsList(
+    spotifyUserManager,
+    items
+  );
 
   const userPlaylistObject = {
     limit,
@@ -224,7 +206,7 @@ async function spotifyCreateUserPlaylistsObject(
     next: next || "",
     previous: previous || "",
     total,
-    items: tracksPopulatedPlaylists,
+    items: userPlaylistsList,
   };
 
   return userPlaylistObject;

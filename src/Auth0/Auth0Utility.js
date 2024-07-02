@@ -7,7 +7,9 @@ async function auth0CreateNewUserObject(sessionID, auth0ID) {
   try {
     const auth0Manager = new Auth0Manager();
     await auth0Manager.initialise();
+
     const userProfileManager = new Auth0UserProfile(auth0Manager, auth0ID);
+
     const userProfile = await userProfileManager.FetchUserProfile();
 
     const userObject = {

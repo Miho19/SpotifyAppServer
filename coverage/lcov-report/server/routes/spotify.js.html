@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">60.86% </span>
+                <span class="strong">84.05% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>42/69</span>
+                <span class='fraction'>58/69</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">33.33% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/3</span>
+                <span class='fraction'>2/6</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">60.86% </span>
+                <span class="strong">84.05% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>42/69</span>
+                <span class='fraction'>58/69</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -157,27 +157,24 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -198,6 +195,9 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -221,8 +221,7 @@ const router = express.Router();
 router.get("/users/:userID", (req, res) =&gt; {
 <span class="cstat-no" title="statement not covered" >  const userObject = routerUtilityRetrieveUserObject(req.session);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  if (!userObject)</span>
-<span class="cstat-no" title="statement not covered" >    throw new AppError(400, "User does not have a valid session");</span>
+<span class="cstat-no" title="statement not covered" >  if (!userObject) return res.status(404).send(new Error("User Not Found"));</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  const spotifyUserObject = spotifyGetUserObject(userObject);</span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -230,23 +229,23 @@ router.get("/users/:userID", (req, res) =&gt; {
 });
 &nbsp;
 router.get("/users/:userID/playlists", async (req, res) =&gt; {
-<span class="cstat-no" title="statement not covered" >  const userObject = routerUtilityRetrieveUserObject(req.session);</span>
+  const userObject = routerUtilityRetrieveUserObject(req.session);
+&nbsp;
+  if (!userObject) <span class="branch-0 cbranch-no" title="branch not covered" >return res.status(404).send(new Error("User Not Found"));</span>
+&nbsp;
+  const spotifyUserManager = new SpotifyUserManager(userObject);
+  const queryID = req.params.userID;
+&nbsp;
+  try {
+    const response = await spotifyRetrieveAllUserPlaylists(
+      spotifyUserManager,
+      queryID
+    )<span class="branch-0 cbranch-no" title="branch not covered" >;</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  if (!userObject)</span>
-<span class="cstat-no" title="statement not covered" >    throw new AppError(400, "User does not have a valid session");</span>
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  const spotifyUserManager = new SpotifyUserManager(userObject);</span>
-<span class="cstat-no" title="statement not covered" >  const queryID = req.params.userID;</span>
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  try {</span>
-<span class="cstat-no" title="statement not covered" >    const response = await spotifyRetrieveAllUserPlaylists(</span>
-<span class="cstat-no" title="statement not covered" >      spotifyUserManager,</span>
-<span class="cstat-no" title="statement not covered" >      queryID</span>
-<span class="cstat-no" title="statement not covered" >    );</span>
 <span class="cstat-no" title="statement not covered" >    return res.status(200).json(response);</span>
-<span class="cstat-no" title="statement not covered" >  } catch (error) {</span>
-<span class="cstat-no" title="statement not covered" >    throw new AppError(500, "Could not retrieve user all playlists");</span>
-<span class="cstat-no" title="statement not covered" >  }</span>
+  } catch (error) {
+    throw new AppError(500, "Could not retrieve user all playlists");
+  }
 });
 &nbsp;
 router.get("/users/:userID/playlists/:playlistID", async (req, res) =&gt; {
@@ -262,11 +261,12 @@ router.get("/users/:userID/playlists/:playlistID", async (req, res) =&gt; {
     const response = await spotifyRetrievePlaylist(
       spotifyUserManager,
       playlistID
-    );
-    return res.status(200).json(response);
-  } <span class="branch-0 cbranch-no" title="branch not covered" >catch (error) {</span>
-<span class="cstat-no" title="statement not covered" >    throw new AppError(500, `Could not retrieve the playlist: ${playlistID}`);</span>
-<span class="cstat-no" title="statement not covered" >  }</span>
+    )<span class="branch-0 cbranch-no" title="branch not covered" >;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    return res.status(200).json(response);</span>
+  } catch (error) {
+    throw new AppError(500, `Could not retrieve the playlist: ${playlistID}`);
+  }
 });
 &nbsp;
 module.exports = router;
@@ -277,7 +277,7 @@ module.exports = router;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-25T03:32:21.013Z
+                at 2024-07-02T04:34:43.147Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

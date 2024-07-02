@@ -24,10 +24,16 @@ router.post("/", async (req, res) => {
   // temp function to simulate adding to database
   _userAdd(newAuth0UserObject);
 
-  const spotifyUserObject =
-    await spotifyConvertAuth0UserObjectToSpotifyUserObject(newAuth0UserObject);
+  try {
+    const spotifyUserObject =
+      await spotifyConvertAuth0UserObjectToSpotifyUserObject(
+        newAuth0UserObject
+      );
 
-  res.status(200).json({ ...spotifyUserObject });
+    res.status(200).json({ ...spotifyUserObject });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 module.exports = router;

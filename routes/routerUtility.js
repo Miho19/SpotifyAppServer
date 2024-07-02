@@ -3,6 +3,7 @@ const { userGetBySessionID } = require("../src/utils");
 
 function routerUtilityRetrieveUserObject(sessionObject) {
   const { id: userSessionID } = sessionObject;
+
   const userObject = userGetBySessionID(userSessionID);
 
   return userObject;

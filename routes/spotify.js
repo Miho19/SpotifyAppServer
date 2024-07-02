@@ -18,8 +18,7 @@ const router = express.Router();
 router.get("/users/:userID", (req, res) => {
   const userObject = routerUtilityRetrieveUserObject(req.session);
 
-  if (!userObject)
-    throw new AppError(400, "User does not have a valid session");
+  if (!userObject) return res.status(404).send(new Error("User Not Found"));
 
   const spotifyUserObject = spotifyGetUserObject(userObject);
 
@@ -29,8 +28,7 @@ router.get("/users/:userID", (req, res) => {
 router.get("/users/:userID/playlists", async (req, res) => {
   const userObject = routerUtilityRetrieveUserObject(req.session);
 
-  if (!userObject)
-    throw new AppError(400, "User does not have a valid session");
+  if (!userObject) return res.status(404).send(new Error("User Not Found"));
 
   const spotifyUserManager = new SpotifyUserManager(userObject);
   const queryID = req.params.userID;
@@ -40,6 +38,7 @@ router.get("/users/:userID/playlists", async (req, res) => {
       spotifyUserManager,
       queryID
     );
+
     return res.status(200).json(response);
   } catch (error) {
     throw new AppError(500, "Could not retrieve user all playlists");
@@ -60,6 +59,7 @@ router.get("/users/:userID/playlists/:playlistID", async (req, res) => {
       spotifyUserManager,
       playlistID
     );
+
     return res.status(200).json(response);
   } catch (error) {
     throw new AppError(500, `Could not retrieve the playlist: ${playlistID}`);
