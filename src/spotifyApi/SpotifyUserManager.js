@@ -10,7 +10,9 @@ class SpotifyUserManager {
   }
 
   get userID() {
-    return this.#auth0UserObject.userProfile.identities[0].user_id;
+    const spotifyID =
+      this.#auth0UserObject.userProfile.identities[0].user_id.split("user:")[1];
+    return spotifyID;
   }
 }
 

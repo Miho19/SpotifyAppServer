@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">84.37% </span>
+                <span class="strong">94.87% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>27/32</span>
+                <span class='fraction'>37/39</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">84.37% </span>
+                <span class="strong">94.87% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>27/32</span>
+                <span class='fraction'>37/39</span>
             </div>
         
             
@@ -95,7 +95,14 @@
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -106,22 +113,29 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -131,31 +145,38 @@
 const { AppError } = require("../src/errors/AppError");
 const router = express.Router();
 &nbsp;
-const { v4: uuid } = require("uuid");
-&nbsp;
-const { UserGetBySessionID, _userAdd } = require("../src/utils");
-const { spotifyGetUserObject } = require("../src/spotifyApi/spotifyUtility");
+const { _userAdd } = require("../src/utils");
+const {
+  spotifyConvertAuth0UserObjectToSpotifyUserObject,
+} = require("../src/spotifyApi/spotifyUtility");
 const { auth0CreateNewUserObject } = require("../src/Auth0/Auth0Utility");
+const { routerUtilityRetrieveUserObject } = require("./routerUtility");
 &nbsp;
 router.post("/", async (req, res) =&gt; {
-  const { id: sessionID } = req.session;
-  const userObject = UserGetBySessionID(sessionID);
+  const userObject = routerUtilityRetrieveUserObject(req.session);
 &nbsp;
-  if (userObject) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
-<span class="cstat-no" title="statement not covered" >    res.status(200).json({ ...userObject.publicUserObject });</span>
-<span class="cstat-no" title="statement not covered" >    return;</span>
-<span class="cstat-no" title="statement not covered" >  }</span>
+  if (userObject)
+<span class="branch-0 cbranch-no" title="branch not covered" >    return res.status(200).json({ ...userObject.publicUserObject });</span>
 &nbsp;
   const { auth0ID } = req.body;
+  const { id: sessionID } = req.session;
+&nbsp;
   if (!auth0ID) <span class="branch-0 cbranch-no" title="branch not covered" >throw new AppError(400, "Missing Auth0 User ID");</span>
 &nbsp;
   const newAuth0UserObject = await auth0CreateNewUserObject(sessionID, auth0ID);
   // temp function to simulate adding to database
   _userAdd(newAuth0UserObject);
 &nbsp;
-  const spotifyUserObject = await spotifyGetUserObject(newAuth0UserObject)<span class="branch-0 cbranch-no" title="branch not covered" >;</span>
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  res.status(200).json({ ...spotifyUserObject });</span>
+  try {
+    const spotifyUserObject =
+      await spotifyConvertAuth0UserObjectToSpotifyUserObject(
+        newAuth0UserObject
+      );
+&nbsp;
+    res.status(200).json({ ...spotifyUserObject });
+  } <span class="branch-0 cbranch-no" title="branch not covered" >catch (error) {</span>
+<span class="cstat-no" title="statement not covered" >    console.log(error);</span>
+<span class="cstat-no" title="statement not covered" >  }</span>
 });
 &nbsp;
 module.exports = router;
@@ -166,7 +187,7 @@ module.exports = router;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-23T07:22:00.688Z
+                at 2024-07-02T05:04:58.360Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

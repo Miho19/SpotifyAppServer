@@ -26,7 +26,6 @@ class Auth0Manager {
       const body = await response.json();
       this.#accessToken = body.access_token;
     } catch (errors) {
-      console.log(errors);
       throw new AppError(500, "Unable to initialise Auth0 Management System");
     }
   }

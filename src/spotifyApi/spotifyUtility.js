@@ -14,7 +14,7 @@ async function fetchRequest(fetchURL, options) {
   }
 }
 
-async function auth0UserObjectConvertToSpotifyUserObject(auth0UserObject) {
+function spotifyConvertAuth0UserObjectToSpotifyUserObject(auth0UserObject) {
   const { userProfile } = auth0UserObject;
 
   const auth0IdentityObject = userProfile.identities[0];
@@ -43,9 +43,12 @@ async function spotifyAPIFetchRequest(
 }
 
 async function spotifyRetrieveUserObject(spotifyUserManager, queryUserID) {
-  spotifyRetrieveUserObjectParameterValidation(spotifyUserManager, queryUserID);
+  const queryID = spotifyRetrieveUserObjectParameterValidation(
+    spotifyUserManager,
+    queryUserID
+  );
 
-  const fetchURL = `${spotifyAPIConstants.baseURL}/users/${queryUserID}`;
+  const fetchURL = `${spotifyAPIConstants.baseURL}/users/${queryID}`;
 
   const spotifyResponse = await spotifyAPIFetchRequest(
     spotifyUserManager,
@@ -80,6 +83,8 @@ function spotifyRetrieveUserObjectParameterValidation(
     throw new AppError(500, "Spotify User Manager Missing");
 
   if (!queryID) throw new AppError(500, "Query ID Missing");
+  if (queryID.toUpperCase() === "ME") return spotifyUserManager.userID;
+  return queryID;
 }
 
 function spotifyAPIGenerateOptionsObject(
@@ -101,9 +106,12 @@ async function spotifyRetrieveAllUserPlaylists(
   spotifyUserManager,
   queryUserID
 ) {
-  spotifyRetrieveUserObjectParameterValidation(spotifyUserManager, queryUserID);
+  const queryID = spotifyRetrieveUserObjectParameterValidation(
+    spotifyUserManager,
+    queryUserID
+  );
 
-  const fetchURL = `${spotifyAPIConstants.baseURL}/users/${queryUserID}/playlists`;
+  const fetchURL = `${spotifyAPIConstants.baseURL}/users/${queryID}/playlists`;
 
   const spotifyResponse = await spotifyAPIFetchRequest(
     spotifyUserManager,
@@ -163,6 +171,7 @@ async function spotifyCreateUserPlaylistObjectFetchPlaylistTracks(
 
 function spotifyPlaylistObjectConvertToServerPlaylistObject(playlistObject) {
   return {
+    id: playlistObject.id,
     name: playlistObject.name,
     owner: playlistObject.owner.display_name,
     type: playlistObject.type,
@@ -172,27 +181,9 @@ function spotifyPlaylistObjectConvertToServerPlaylistObject(playlistObject) {
   };
 }
 
-async function spotifyCreateUserPlaylistsObjectPopulatePlaylistsWithtracks(
-  spotifyUserManager,
-  playlists
-) {
-  return await Promise.all(
-    playlists.map(async (playlist) => {
-      let tracks;
-      try {
-        tracks = await spotifyCreateUserPlaylistObjectFetchPlaylistTracks(
-          spotifyUserManager,
-          playlist.tracks
-        );
-      } catch (err) {
-        throw new AppError(400, "Failed to retrieve playlist tracks");
-      }
-
-      return spotifyPlaylistObjectConvertToServerPlaylistObject({
-        ...playlist,
-        tracks,
-      });
-    })
+async function spotifyCreateUserPlaylistsList(spotifyUserManager, playlists) {
+  return playlists.map((playlist) =>
+    spotifyPlaylistObjectConvertToServerPlaylistObject(playlist)
   );
 }
 
@@ -202,11 +193,10 @@ async function spotifyCreateUserPlaylistsObject(
 ) {
   let { limit, offset, next, previous, total, items } = spotifyResponse;
 
-  const tracksPopulatedPlaylists =
-    await spotifyCreateUserPlaylistsObjectPopulatePlaylistsWithtracks(
-      spotifyUserManager,
-      items
-    );
+  const userPlaylistsList = await spotifyCreateUserPlaylistsList(
+    spotifyUserManager,
+    items
+  );
 
   const userPlaylistObject = {
     limit,
@@ -214,16 +204,19 @@ async function spotifyCreateUserPlaylistsObject(
     next: next || "",
     previous: previous || "",
     total,
-    items: tracksPopulatedPlaylists,
+    items: userPlaylistsList,
   };
 
   return userPlaylistObject;
 }
 
 async function spotifyRetrievePlaylist(spotifyUserManager, playlistID) {
-  spotifyRetrieveUserObjectParameterValidation(spotifyUserManager, playlistID);
+  const queryPlaylistID = spotifyRetrieveUserObjectParameterValidation(
+    spotifyUserManager,
+    playlistID
+  );
 
-  const fetchURL = `${spotifyAPIConstants.baseURL}/playlists/${playlistID}`;
+  const fetchURL = `${spotifyAPIConstants.baseURL}/playlists/${queryPlaylistID}`;
 
   const spotifyResponse = await spotifyAPIFetchRequest(
     spotifyUserManager,
@@ -239,7 +232,7 @@ async function spotifyRetrievePlaylist(spotifyUserManager, playlistID) {
 }
 
 module.exports = {
-  auth0UserObjectConvertToSpotifyUserObject,
+  spotifyConvertAuth0UserObjectToSpotifyUserObject,
   spotifyRetrieveUserObject,
   spotifyRetrieveAllUserPlaylists,
   spotifyRetrievePlaylist,

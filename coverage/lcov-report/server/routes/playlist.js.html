@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">57.57% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>33/33</span>
+                <span class='fraction'>19/33</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>3/3</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">57.57% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>33/33</span>
+                <span class='fraction'>19/33</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -104,26 +104,26 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -137,26 +137,26 @@ let { playlists } = require("../src/utils");
 const { v4: uuid } = require("uuid");
 &nbsp;
 router.get("/", (req, res) =&gt; {
-  res.status(200).json(playlists);
+<span class="cstat-no" title="statement not covered" >  res.status(200).json(playlists);</span>
 });
 &nbsp;
 router.post("/", (req, res) =&gt; {
-  const body = req.body;
-  const newPlaylist = {
-    ...body,
-    id: uuid(),
-    SpotifyplaylistID: uuid(),
-  };
-  playlists = [...playlists, newPlaylist];
-&nbsp;
-  res.status(201).json(newPlaylist);
+<span class="cstat-no" title="statement not covered" >  const body = req.body;</span>
+<span class="cstat-no" title="statement not covered" >  const newPlaylist = {</span>
+<span class="cstat-no" title="statement not covered" >    ...body,</span>
+<span class="cstat-no" title="statement not covered" >    id: uuid(),</span>
+<span class="cstat-no" title="statement not covered" >    SpotifyplaylistID: uuid(),</span>
+<span class="cstat-no" title="statement not covered" >  };</span>
+<span class="cstat-no" title="statement not covered" >  playlists = [...playlists, newPlaylist];</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  res.status(201).json(newPlaylist);</span>
 });
 &nbsp;
 router.get("/:playlistID", (req, res) =&gt; {
-  const { playlistID } = req.params;
-&nbsp;
-  const playlist = playlistGetByID(playlistID);
-  res.status(200).json(playlist);
+<span class="cstat-no" title="statement not covered" >  const { playlistID } = req.params;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  const playlist = playlistGetByID(playlistID);</span>
+<span class="cstat-no" title="statement not covered" >  res.status(200).json(playlist);</span>
 });
 &nbsp;
 router.use("/:playlistID/songs", songsRouter);
@@ -169,7 +169,7 @@ module.exports = router;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-23T07:22:00.688Z
+                at 2024-07-02T04:34:43.147Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
