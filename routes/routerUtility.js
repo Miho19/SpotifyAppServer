@@ -9,4 +9,16 @@ function routerUtilityRetrieveUserObject(sessionObject) {
   return userObject;
 }
 
-module.exports = { routerUtilityRetrieveUserObject };
+/**
+ * Add logging here if needed
+ *
+ */
+async function routerControllerHandler(func, next) {
+  try {
+    await func();
+  } catch (error) {
+    if (error instanceof AppError) next(error);
+  }
+}
+
+module.exports = { routerUtilityRetrieveUserObject, routerControllerHandler };
