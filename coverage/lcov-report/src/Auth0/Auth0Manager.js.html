@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for server/app.js</title>
+    <title>Code coverage report for src/Auth0/Auth0Manager.js</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../prettify.css" />
-    <link rel="stylesheet" href="../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../favicon.png" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../sort-arrow-sprite.png);
+            background-image: url(../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../index.html">All files</a> / <a href="index.html">server</a> app.js</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/Auth0</a> Auth0Manager.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">94.73% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>34/34</span>
+                <span class='fraction'>36/38</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">71.42% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>5/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">94.73% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>34/34</span>
+                <span class='fraction'>36/38</span>
             </div>
         
             
@@ -97,7 +97,11 @@
 <a name='L32'></a><a href='#L32'>32</a>
 <a name='L33'></a><a href='#L33'>33</a>
 <a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -125,46 +129,54 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">require("dotenv").config();
-const express = require("express");
-const cookieParser = require("cookie-parser");
-const session = require("express-session");
-const cors = require("cors");
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const { AppError } = require("../errors/AppError");
 &nbsp;
-const indexRouter = require("./routes/index");
-const auth0Router = require("./routes/auth0");
-const spotifyRouter = require("./routes/spotify");
+class Auth0Manager {
+  #accessToken;
+  static #instance;
+  constructor() {
+    if (!Auth0Manager.#instance) Auth0Manager.#instance = this;
+    return Auth0Manager.#instance;
+  }
 &nbsp;
-const { errorHandler } = require("./src/errors/AppError");
+  async initialise() {
+    if (this.#accessToken) <span class="branch-0 cbranch-no" title="branch not covered" >return;</span>
 &nbsp;
-const app = express();
+    const options = {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: `{"client_id":"${process.env.AUTH0CLIENTID}","client_secret":"${process.env.AUTH0CLIENTSECRET}","audience":"${process.env.AUTH0MANAGEMENTDOMAIN}/api/v2/","grant_type":"client_credentials"}`,
+    };
 &nbsp;
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
-app.use(cors({ credentials: true, origin: true }));
+    try {
+      const response = await fetch(
+        `${process.env.AUTH0MANAGEMENTDOMAIN}/oauth/token`,
+        options
+      );
 &nbsp;
-app.use(
-  session({
-    secret: "supersecretsecret",
-    resave: false,
-    saveUninitialized: true,
-  })
-);
+      const body = await response.json();
+      this.#accessToken = body.access_token;
+    } <span class="branch-0 cbranch-no" title="branch not covered" >catch (errors) {</span>
+<span class="cstat-no" title="statement not covered" >      throw new AppError(500, "Unable to initialise Auth0 Management System");</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
+  }
 &nbsp;
-app.use("/auth0", auth0Router);
-app.use("/spotify", spotifyRouter);
+  get auth0AccessToken() {
+    return this.#accessToken;
+  }
+}
 &nbsp;
-app.use(indexRouter);
-app.use(errorHandler);
-&nbsp;
-module.exports = { app };
+module.exports = Auth0Manager;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -172,16 +184,16 @@ module.exports = { app };
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-02T05:04:58.360Z
+                at 2024-07-02T05:02:28.206Z
             </div>
-        <script src="../prettify.js"></script>
+        <script src="../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../sorter.js"></script>
-        <script src="../block-navigation.js"></script>
+        <script src="../../sorter.js"></script>
+        <script src="../../block-navigation.js"></script>
     </body>
 </html>
     

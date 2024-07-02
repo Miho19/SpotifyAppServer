@@ -14,9 +14,7 @@ async function fetchRequest(fetchURL, options) {
   }
 }
 
-async function spotifyConvertAuth0UserObjectToSpotifyUserObject(
-  auth0UserObject
-) {
+function spotifyConvertAuth0UserObjectToSpotifyUserObject(auth0UserObject) {
   const { userProfile } = auth0UserObject;
 
   const auth0IdentityObject = userProfile.identities[0];

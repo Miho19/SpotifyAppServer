@@ -12,8 +12,11 @@ const { routerUtilityRetrieveUserObject } = require("./routerUtility");
 router.post("/", async (req, res) => {
   const userObject = routerUtilityRetrieveUserObject(req.session);
 
-  if (userObject)
-    return res.status(200).json({ ...userObject.publicUserObject });
+  if (userObject) {
+    const spotifyUserObject =
+      spotifyConvertAuth0UserObjectToSpotifyUserObject(userObject);
+    return res.status(200).json({ ...spotifyUserObject });
+  }
 
   const { auth0ID } = req.body;
   const { id: sessionID } = req.session;
@@ -24,16 +27,10 @@ router.post("/", async (req, res) => {
   // temp function to simulate adding to database
   _userAdd(newAuth0UserObject);
 
-  try {
-    const spotifyUserObject =
-      await spotifyConvertAuth0UserObjectToSpotifyUserObject(
-        newAuth0UserObject
-      );
+  const spotifyUserObject =
+    spotifyConvertAuth0UserObjectToSpotifyUserObject(newAuth0UserObject);
 
-    res.status(200).json({ ...spotifyUserObject });
-  } catch (error) {
-    console.log(error);
-  }
+  res.status(200).json({ ...spotifyUserObject });
 });
 
 module.exports = router;
