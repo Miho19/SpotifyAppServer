@@ -5,8 +5,10 @@ class AppError extends Error {
     this.message = message;
   }
 }
+
 function errorHandler(err, req, res, next) {
   const { statusCode = 500, message = "Internal Server Error" } = err;
+
   res.status(statusCode).json({ statusCode, message });
 }
 
