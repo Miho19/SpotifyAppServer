@@ -2,12 +2,19 @@
  * Integration tests for when frontend requests all the users playlists
  * https://stackoverflow.com/questions/14001183/how-to-authenticate-supertest-requests-with-passport
  */
-const { app } = require("../app");
-const request = require("supertest").agent(app);
+const init = require("../app");
+const supertest = require("supertest");
 
 const { auth0TestProfile } = require("./spotifyUserTestUtilities");
 
 describe("Spotify User All Playlists Route", () => {
+  let app;
+  let request;
+  beforeAll(async () => {
+    app = await init();
+    request = supertest.agent(app);
+  });
+
   let cookie;
   beforeAll((done) => {
     request

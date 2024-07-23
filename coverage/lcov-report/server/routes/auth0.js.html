@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>34/40</span>
+                <span class='fraction'>40/40</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/4</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>34/40</span>
+                <span class='fraction'>40/40</span>
             </div>
         
             
@@ -115,31 +115,31 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -158,16 +158,16 @@ router.post("/", async (req, res, next) =&gt; {
   try {
     const userObject = await routerUtilityRetrieveUserObject(req.session);
 &nbsp;
-    if (userObject) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
-<span class="cstat-no" title="statement not covered" >      const spotifyUserObject =</span>
-<span class="cstat-no" title="statement not covered" >        routerUtilityRetrieveUserObjectRemoveAccessTokenCode(userObject);</span>
-<span class="cstat-no" title="statement not covered" >      return res.status(200).json({ ...spotifyUserObject });</span>
-<span class="cstat-no" title="statement not covered" >    }</span>
+    if (userObject) {
+      const spotifyUserObject =
+        routerUtilityRetrieveUserObjectRemoveAccessTokenCode(userObject);
+      return res.status(200).json({ ...spotifyUserObject });
+    }
 &nbsp;
     const { auth0ID } = req.body;
     const { id: sessionID } = req.session;
 &nbsp;
-    if (!auth0ID) <span class="branch-0 cbranch-no" title="branch not covered" >throw new AppError(400, "Missing Auth0 User ID");</span>
+    if (!auth0ID) throw new AppError(400, "Missing Auth0 User ID");
 &nbsp;
     const newAuth0UserObject = await auth0CreateNewUserObject(
       sessionID,
@@ -177,9 +177,9 @@ router.post("/", async (req, res, next) =&gt; {
     const spotifyUserObject = await routerUtilityAddUser(newAuth0UserObject);
 &nbsp;
     res.status(200).json({ ...spotifyUserObject });
-  } <span class="branch-0 cbranch-no" title="branch not covered" >catch (error) {</span>
-<span class="cstat-no" title="statement not covered" >    if (error instanceof AppError) next(error);</span>
-<span class="cstat-no" title="statement not covered" >  }</span>
+  } catch (error) {
+    if (error instanceof AppError) next(error);
+  }
 });
 &nbsp;
 module.exports = router;
@@ -190,7 +190,7 @@ module.exports = router;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-22T06:22:40.385Z
+                at 2024-07-23T16:01:37.815Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

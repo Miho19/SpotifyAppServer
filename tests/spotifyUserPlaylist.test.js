@@ -2,13 +2,22 @@
  * Integration tests for when frontend requests an users playlist
  *
  */
-const { app } = require("../app");
-const request = require("supertest").agent(app);
+const init = require("../app");
+const supertest = require("supertest");
 
 const { auth0TestProfile } = require("./spotifyUserTestUtilities");
 
 describe("Spotify User Playlist Route", () => {
   let cookie;
+
+  let app;
+  let request;
+
+  beforeAll(async () => {
+    app = await init();
+    request = supertest.agent(app);
+  });
+
   beforeAll((done) => {
     request
       .post("/auth0")

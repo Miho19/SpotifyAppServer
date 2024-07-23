@@ -22,6 +22,7 @@ function routerUtilityRetrieveUserObjectRemoveAccessTokenCode(userObject) {
 
 async function routerUtilityAddUser(userObject) {
   const resultUserObjectAdded = await mysql.usersAdd(userObject);
+
   const returnObject = routerUtilityRetrieveUserObjectRemoveAccessTokenCode(
     resultUserObjectAdded
   );

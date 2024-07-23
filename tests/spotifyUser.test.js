@@ -7,17 +7,16 @@ const {
 } = require("../src/spotifyApi/spotifyUtility");
 const { AppError } = require("../src/errors/AppError");
 
-const { auth0TestProfile } = require("./spotifyUserTestUtilities");
+const {
+  spotifyUserObjectTest,
+  auth0TestProfile,
+} = require("./spotifyUserTestUtilities");
 
 describe("Spotify Utility Tests", () => {
   let spotifyUserManager;
 
   beforeAll(async () => {
-    const auth0UserObject = await auth0CreateNewUserObject(
-      1,
-      auth0TestProfile.auth0ID
-    );
-    spotifyUserManager = new SpotifyUserManager(auth0UserObject);
+    spotifyUserManager = new SpotifyUserManager(spotifyUserObjectTest);
   });
 
   describe("Spotify User Manager", () => {
@@ -33,6 +32,7 @@ describe("Spotify Utility Tests", () => {
   describe("Spotify API User Profile", () => {
     test("Spotify getting me user profile", async () => {
       const queryUserID = auth0TestProfile.spotifyUserID;
+
       const response = await spotifyRetrieveUserObject(
         spotifyUserManager,
         queryUserID

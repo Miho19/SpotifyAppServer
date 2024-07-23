@@ -50,12 +50,13 @@ router.get("/users/:userID/playlists", async (req, res, next) => {
 
 router.get("/users/:userID/playlists/:playlistID", async (req, res, next) => {
   await routerControllerHandler(async () => {
-    const userObject = routerUtilityRetrieveUserObject(req.session);
+    const userObject = await routerUtilityRetrieveUserObject(req.session);
 
     if (!userObject)
       throw new AppError(400, "User does not have a valid session");
 
     const spotifyUserManager = new SpotifyUserManager(userObject);
+
     const { playlistID } = req.params;
 
     const response = await spotifyRetrievePlaylist(

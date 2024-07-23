@@ -58,4 +58,16 @@ const userObjectTest = {
   userProfile: auth0TestUserObject,
 };
 
-module.exports = { auth0TestProfile, auth0TestUserObject, userObjectTest };
+const spotifyUserObjectTest = {
+  accessToken: auth0TestUserObject.identities[0].refresh_token,
+  displayName: auth0TestUserObject.display_name,
+  image: auth0TestUserObject.images[0].url,
+  spotifyID: auth0TestUserObject.user_id,
+};
+
+module.exports = {
+  auth0TestProfile,
+  auth0TestUserObject,
+  userObjectTest,
+  spotifyUserObjectTest,
+};
