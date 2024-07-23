@@ -10,6 +10,8 @@ const spotifyRouter = require("./routes/spotify");
 
 const { errorHandler } = require("./src/errors/AppError");
 
+const MysqlLocalHost = require("./src/database/mysqlLocalHost");
+
 const app = express();
 
 app.use(express.json());
@@ -31,4 +33,16 @@ app.use("/spotify", spotifyRouter);
 app.use(indexRouter);
 app.use(errorHandler);
 
-module.exports = { app };
+const mysql = new MysqlLocalHost();
+
+async function init() {
+  try {
+    await mysql.initialise();
+    return app;
+  } catch (error) {
+    console.error("Failed init process");
+    process.exit();
+  }
+}
+
+module.exports = init;

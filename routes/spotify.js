@@ -32,7 +32,7 @@ router.get("/users/:userID", async (req, res, next) => {
 
 router.get("/users/:userID/playlists", async (req, res, next) => {
   await routerControllerHandler(async () => {
-    const userObject = routerUtilityRetrieveUserObject(req.session);
+    const userObject = await routerUtilityRetrieveUserObject(req.session);
 
     if (!userObject) return res.status(404).send(new Error("User Not Found"));
 

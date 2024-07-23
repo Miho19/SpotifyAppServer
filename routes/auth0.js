@@ -2,20 +2,20 @@ const express = require("express");
 const { AppError } = require("../src/errors/AppError");
 const router = express.Router();
 
-const { _userAdd } = require("../src/utils");
-const {
-  spotifyConvertAuth0UserObjectToSpotifyUserObject,
-} = require("../src/spotifyApi/spotifyUtility");
 const { auth0CreateNewUserObject } = require("../src/Auth0/Auth0Utility");
-const { routerUtilityRetrieveUserObject } = require("./routerUtility");
+const {
+  routerUtilityRetrieveUserObject,
+  routerUtilityRetrieveUserObjectRemoveAccessTokenCode,
+  routerUtilityAddUser,
+} = require("./routerUtility");
 
 router.post("/", async (req, res, next) => {
   try {
-    const userObject = routerUtilityRetrieveUserObject(req.session);
+    const userObject = await routerUtilityRetrieveUserObject(req.session);
 
     if (userObject) {
       const spotifyUserObject =
-        spotifyConvertAuth0UserObjectToSpotifyUserObject(userObject);
+        routerUtilityRetrieveUserObjectRemoveAccessTokenCode(userObject);
       return res.status(200).json({ ...spotifyUserObject });
     }
 
@@ -28,11 +28,8 @@ router.post("/", async (req, res, next) => {
       sessionID,
       auth0ID
     );
-    // temp function to simulate adding to database
-    _userAdd(newAuth0UserObject);
 
-    const spotifyUserObject =
-      spotifyConvertAuth0UserObjectToSpotifyUserObject(newAuth0UserObject);
+    const spotifyUserObject = await routerUtilityAddUser(newAuth0UserObject);
 
     res.status(200).json({ ...spotifyUserObject });
   } catch (error) {
