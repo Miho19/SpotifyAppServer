@@ -4,6 +4,7 @@ const {
   spotifyRetrieveUserObject,
   spotifyRetrieveAllUserPlaylists,
   spotifyRetrievePlaylist,
+  spotifyClientCredentialsGrant,
 } = require("../src/spotifyApi/spotifyUtility");
 const { AppError } = require("../src/errors/AppError");
 
@@ -16,6 +17,8 @@ describe("Spotify Utility Tests", () => {
   let spotifyUserManager;
 
   beforeAll(async () => {
+    const accessToken = await spotifyClientCredentialsGrant();
+    spotifyUserObjectTest.accessToken = accessToken;
     spotifyUserManager = new SpotifyUserManager(spotifyUserObjectTest);
   });
 

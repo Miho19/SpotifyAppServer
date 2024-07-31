@@ -1,3 +1,4 @@
+const { json } = require("express");
 const { AppError } = require("../errors/AppError");
 
 const spotifyAPIConstants = {
@@ -10,6 +11,7 @@ async function fetchRequest(fetchURL, options) {
     const body = await response.json();
     return body;
   } catch (err) {
+    console.log(err);
     throw new AppError(400, "Fetch request failed");
   }
 }
@@ -217,7 +219,37 @@ async function spotifyRetrievePlaylist(spotifyUserManager, playlistID) {
   return spotifyPlaylistObjectConvertToServerPlaylistObject(spotifyResponse);
 }
 
+// https://stackoverflow.com/questions/62693927/retrieving-oauth2-token-via-node-fetch
+async function spotifyClientCredentialsGrant() {
+  const authorizationText = new Buffer.from(
+    process.env.SPOTIFYCLIENTID + ":" + process.env.SPOTIFYCLIENTSECRET
+  ).toString("base64");
+
+  const body = new URLSearchParams();
+  body.append("grant_type", "client_credentials");
+
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Accept: "application/json",
+      Authorization: `Basic ` + authorizationText,
+    },
+    body,
+  };
+
+  const response = await fetchRequest(
+    "https://accounts.spotify.com/api/token",
+    options
+  );
+
+  const accessToken = response.access_token;
+
+  return accessToken;
+}
+
 module.exports = {
+  spotifyClientCredentialsGrant,
   spotifyRetrieveUserObject,
   spotifyRetrieveAllUserPlaylists,
   spotifyRetrievePlaylist,
