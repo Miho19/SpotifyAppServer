@@ -6,31 +6,46 @@ const init = require("../app");
 const supertest = require("supertest");
 
 const { auth0TestProfile } = require("./spotifyUserTestUtilities");
+const MysqlLocalHost = require("../src/database/mysqlLocalHost");
+const {
+  spotifyClientCredentialsGrant,
+} = require("../src/spotifyApi/spotifyUtility");
 
 describe("Spotify User Playlist Route", () => {
   let cookie;
-
   let app;
   let request;
+  let sessionID;
+  let mysqlLocalHost;
 
   beforeAll(async () => {
     app = await init();
     request = supertest.agent(app);
+
+    const response = await request
+      .post("/auth0")
+      .send({ auth0ID: auth0TestProfile.auth0ID });
+
+    cookie = response.headers["set-cookie"];
+    sessionID = cookie[0].split(";")[0];
+    // need to edit the database value access Token
+
+    const accessToken = await spotifyClientCredentialsGrant();
+    mysqlLocalHost = new MysqlLocalHost();
+
+    await mysqlLocalHost.connection.query(
+      "UPDATE users SET u_accessToken=? WHERE u_displayName=?",
+      [accessToken, "Josh April"]
+    );
+
+    await mysqlLocalHost.connection.query("SELECT * FROM users");
   });
 
-  beforeAll((done) => {
-    request
-      .post("/auth0")
-      .send({ auth0ID: auth0TestProfile.auth0ID })
-      .then((res) => {
-        cookie = res.headers["set-cookie"];
-        done();
-      });
+  afterAll(async () => {
+    await mysqlLocalHost.usersRemoveAll();
   });
 
   test("Retrieve a playlist from an user", async () => {
-    const sessionID = cookie[0].split(";")[0];
-
     try {
       const response = await request
         .get(`/spotify/users/me/playlists/${auth0TestProfile.playlist.id}`)

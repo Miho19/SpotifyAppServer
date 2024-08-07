@@ -1,4 +1,3 @@
-const { auth0CreateNewUserObject } = require("../src/Auth0/Auth0Utility");
 const { SpotifyUserManager } = require("../src/spotifyApi/SpotifyUserManager");
 const {
   spotifyRetrieveUserObject,
