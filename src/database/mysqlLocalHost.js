@@ -52,6 +52,8 @@ class MysqlLocalHost {
       [spotifyUserObject.accessToken]
     );
 
+    if (results.length === 0) return;
+
     return results;
   }
 

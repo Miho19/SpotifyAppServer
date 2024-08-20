@@ -33,16 +33,16 @@ app.use("/spotify", spotifyRouter);
 app.use(indexRouter);
 app.use(errorHandler);
 
-const mysql = new MysqlLocalHost();
-
 async function init() {
-  try {
-    await mysql.initialise();
-    return app;
-  } catch (error) {
-    console.error("Failed init process");
-    process.exit();
-  }
+  return new Promise(async (resolve, reject) => {
+    try {
+      const mysql = new MysqlLocalHost();
+      await mysql.initialise();
+      resolve(app);
+    } catch (error) {
+      reject(error);
+    }
+  });
 }
 
 module.exports = init;

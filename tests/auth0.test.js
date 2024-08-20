@@ -11,7 +11,7 @@ describe("Auth0", () => {
     app = await init();
   });
 
-  describe.skip("Auth0Manager Class", () => {
+  describe("Auth0Manager Class", () => {
     let auth0;
 
     beforeEach(() => {
@@ -29,7 +29,7 @@ describe("Auth0", () => {
     });
   });
 
-  describe.skip("Auth0UserProfile Class", () => {
+  describe("Auth0UserProfile Class", () => {
     let auth0;
 
     beforeEach(() => {
@@ -68,7 +68,7 @@ describe("Auth0", () => {
       });
     });
 
-    describe.skip("Retrieving already created user", () => {
+    describe("Retrieving already created user", () => {
       beforeAll(async () => {
         await request(app)
           .post("/auth0")

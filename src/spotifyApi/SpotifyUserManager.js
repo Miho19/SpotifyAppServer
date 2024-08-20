@@ -1,17 +1,16 @@
 class SpotifyUserManager {
-  #auth0UserObject;
+  #userObject;
 
-  constructor(auth0UserObject) {
-    this.#auth0UserObject = auth0UserObject;
+  constructor(userObject) {
+    this.#userObject = userObject;
   }
 
   get accessToken() {
-    return this.#auth0UserObject.userProfile.identities[0].access_token;
+    return this.#userObject.accessToken;
   }
 
   get userID() {
-    const spotifyID =
-      this.#auth0UserObject.userProfile.identities[0].user_id.split("user:")[1];
+    const spotifyID = this.#userObject.spotifyID.split("user:")[1];
     return spotifyID;
   }
 }
